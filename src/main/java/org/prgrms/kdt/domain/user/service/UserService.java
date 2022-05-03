@@ -34,7 +34,7 @@ public class UserService {
         User user = User.builder()
                 .name(new Name(request.getName()))
                 .address(new Address(request.getAddress()))
-                .email(new Email(request.getAddress()))
+                .email(new Email(request.getEmail()))
                 .createdDateTime(LocalDateTime.now())
                 .modifiedDateTime(LocalDateTime.now())
                 .build();

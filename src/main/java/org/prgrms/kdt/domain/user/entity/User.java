@@ -28,15 +28,4 @@ public class User extends BaseEntity {
         this.email = email;
         this.address = address;
     }
-
-    @Builder
-    public User(LocalDateTime createdDateTime, LocalDateTime modifiedDateTime,
-                Name name, Password password, Email email, Address address) {
-        super(createdDateTime, modifiedDateTime);
-        this.name = name;
-        this.password = password;
-        this.email = email;
-        this.address = address;
-    }
-
 }

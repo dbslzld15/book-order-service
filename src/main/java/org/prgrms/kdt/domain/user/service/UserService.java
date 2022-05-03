@@ -62,6 +62,6 @@ public class UserService {
         userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UserException(USER_NOT_EXIST));
         return userRepository.findByEmailAndPassword(request.getEmail(), request.getPassword())
-                .orElseThrow(() -> new UserException(PASSWORD_INCORRECT));
+                .orElseThrow(() -> new UserException(USER_PASSWORD_INCORRECT));
     }
 }

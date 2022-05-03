@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.prgrms.kdt.domain.user.exception.UserExceptionType.NOT_SAVED;
+import static org.prgrms.kdt.domain.user.exception.UserExceptionType.USER_NOT_SAVED;
 import static org.prgrms.kdt.global.utils.Utils.toLocalDateTime;
 
 @Repository
@@ -44,7 +44,7 @@ public class JdbcUserRepository implements UserRepository{
                 source, keyHolder, new String[]{"user_id"}
         );
         if(savedRows != 1) {
-            throw new UserException(NOT_SAVED);
+            throw new UserException(USER_NOT_SAVED);
         }
         return keyHolder.getKey().longValue();
     }
@@ -102,7 +102,7 @@ public class JdbcUserRepository implements UserRepository{
     }
 
     private static final RowMapper<User> userRowMapper = (rs, i) -> {
-        String userId = rs.getString("user_id");
+        long userId = rs.getLong("user_id");
         String name = rs.getString("name");
         String password = rs.getString("password");
         String email = rs.getString("email");
@@ -111,7 +111,7 @@ public class JdbcUserRepository implements UserRepository{
         LocalDateTime modifiedAt = toLocalDateTime(rs.getTimestamp("modified_at"));
 
         return User.builder()
-                .userId(Long.parseLong(userId))
+                .userId(userId)
                 .name(new Name(name))
                 .password(new Password(password))
                 .email(new Email(email))

@@ -15,8 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-
+import static java.time.LocalDateTime.now;
 import static org.prgrms.kdt.domain.user.exception.UserExceptionType.*;
 
 @Service
@@ -35,8 +34,8 @@ public class UserService {
                 .name(new Name(request.getName()))
                 .address(new Address(request.getAddress()))
                 .email(new Email(request.getEmail()))
-                .createdDateTime(LocalDateTime.now())
-                .modifiedDateTime(LocalDateTime.now())
+                .createdDateTime(now())
+                .modifiedDateTime(now())
                 .build();
         return userRepository.save(user);
     }
@@ -50,8 +49,8 @@ public class UserService {
                 .name(user.getName())
                 .address(user.getAddress())
                 .password(new Password(request.getPassword()))
-                .createdDateTime(LocalDateTime.now())
-                .modifiedDateTime(LocalDateTime.now())
+                .createdDateTime(now())
+                .modifiedDateTime(now())
                 .build();
         userRepository.update(updateUser);
         log.info("update Password, user email: {}", request.getEmail());

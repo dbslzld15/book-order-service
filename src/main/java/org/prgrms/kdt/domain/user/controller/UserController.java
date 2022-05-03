@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/users")
@@ -23,13 +24,13 @@ public class UserController {
     }
 
     @PostMapping("/join")
-    public String joinUser(@RequestBody UserCreateRequest createRequest) {
+    public String joinUser(@Valid @RequestBody UserCreateRequest createRequest) {
         userService.save(createRequest);
         return "redirect:/users";
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody UserLoginRequest loginRequest, HttpSession session) {
+    public String login(@Valid @RequestBody UserLoginRequest loginRequest, HttpSession session) {
         User user = userService.getUserByLogin(loginRequest);
         session.setAttribute("userId", user.getUserId());
         return "menu";
@@ -42,7 +43,7 @@ public class UserController {
     }
 
     @PostMapping("/reset")
-    public String resetPassword(@RequestBody UserPwResetRequest resetRequest){
+    public String resetPassword(@Valid @RequestBody UserPwResetRequest resetRequest){
         userService.updatePassword(resetRequest);
         return "redirect:/users";
     }

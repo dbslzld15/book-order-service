@@ -23,14 +23,6 @@ public class Item extends BaseEntity {
         this.stockQuantity = stockQuantity;
     }
 
-    @Builder
-    public Item(LocalDateTime createdDateTime, LocalDateTime modifiedDateTime, Price price, int stockQuantity) {
-        super(createdDateTime, modifiedDateTime);
-        validateStockQuantity(stockQuantity);
-        this.price = price;
-        this.stockQuantity = stockQuantity;
-    }
-
     private void validateStockQuantity(int stockQuantity) {
         if(stockQuantity < MIN_STOCK_QUANTITY) {
             throw new IllegalArgumentException("재고 수량은 0개 미만이 될 수 없습니다.");

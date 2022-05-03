@@ -13,20 +13,14 @@ public class Book extends BaseEntity {
     private Long bookId;
     private Title title;
     private Name authorName;
+    private Long itemId;
 
     @Builder
-    public Book(LocalDateTime createdDateTime, LocalDateTime modifiedDateTime,
-                long bookId, Title title, Name authorName) {
+    public Book(LocalDateTime createdDateTime, LocalDateTime modifiedDateTime, Long bookId, Title title, Name authorName, Long itemId) {
         super(createdDateTime, modifiedDateTime);
         this.bookId = bookId;
         this.title = title;
         this.authorName = authorName;
-    }
-
-    @Builder
-    public Book(LocalDateTime createdDateTime, LocalDateTime modifiedDateTime, Title title, Name authorName) {
-        super(createdDateTime, modifiedDateTime);
-        this.title = title;
-        this.authorName = authorName;
+        this.itemId = itemId;
     }
 }

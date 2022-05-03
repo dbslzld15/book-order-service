@@ -1,13 +1,12 @@
 package org.prgrms.kdt.domain.user.repository;
 
+import lombok.extern.slf4j.Slf4j;
 import org.prgrms.kdt.domain.user.entity.User;
 import org.prgrms.kdt.domain.user.exception.UserException;
 import org.prgrms.kdt.domain.user.vo.Address;
 import org.prgrms.kdt.domain.user.vo.Email;
 import org.prgrms.kdt.domain.user.vo.Name;
 import org.prgrms.kdt.domain.user.vo.Password;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -24,10 +23,10 @@ import java.util.Optional;
 import static org.prgrms.kdt.domain.user.exception.UserExceptionType.USER_NOT_SAVED;
 import static org.prgrms.kdt.global.utils.Utils.toLocalDateTime;
 
+@Slf4j
 @Repository
 public class JdbcUserRepository implements UserRepository{
 
-    private static final Logger log = LoggerFactory.getLogger(JdbcUserRepository.class);
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     public JdbcUserRepository(NamedParameterJdbcTemplate jdbcTemplate) {

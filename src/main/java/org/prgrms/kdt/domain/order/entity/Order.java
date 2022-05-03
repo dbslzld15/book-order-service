@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 public class Order extends BaseEntity {
-    private long orderId;
+    private Long orderId;
     private Address address;
     private OrderStatus orderStatus;
     private LocalDateTime orderDate;

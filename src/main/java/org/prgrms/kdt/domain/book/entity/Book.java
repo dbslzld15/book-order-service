@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 public class Book extends BaseEntity {
-    private long bookId;
+    private Long bookId;
     private Title title;
     private Name authorName;
 

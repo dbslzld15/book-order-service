@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 public class Item extends BaseEntity {
-    private long itemId;
+    private Long itemId;
     private Price price;
     private int stockQuantity;
     private static final int MIN_STOCK_QUANTITY = 0;

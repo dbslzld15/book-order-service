@@ -42,8 +42,9 @@ class JdbcUserRepositoryTest {
                 .build();
         //when
         long savedId = userRepository.save(user);
+        Optional<User> findUser = userRepository.findById(savedId);
         //then
-        assertThat(savedId).isEqualTo(1);
+        assertThat(findUser.get().getEmail()).isEqualTo(user.getEmail());
     }
 
     @Test

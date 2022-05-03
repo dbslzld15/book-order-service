@@ -2,6 +2,8 @@ package org.prgrms.kdt.domain.user.vo;
 
 import lombok.Getter;
 
+import java.util.Objects;
+
 @Getter
 public class Name {
     private final String name;
@@ -19,5 +21,18 @@ public class Name {
         if(name.length() < MIN_LENGTH) {
             throw new IllegalArgumentException("이름은 2자 이상이어야합니다.");
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Name name1 = (Name) o;
+        return Objects.equals(getName(), name1.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName());
     }
 }

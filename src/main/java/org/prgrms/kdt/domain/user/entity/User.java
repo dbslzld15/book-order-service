@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Getter
 public class User extends BaseEntity {
-    private long userId;
+    private Long userId;
     private Name name;
     private Password password;
     private Email email;
@@ -38,4 +38,5 @@ public class User extends BaseEntity {
         this.email = email;
         this.address = address;
     }
+
 }

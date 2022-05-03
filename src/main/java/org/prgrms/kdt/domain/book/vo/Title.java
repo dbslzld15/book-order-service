@@ -2,6 +2,8 @@ package org.prgrms.kdt.domain.book.vo;
 
 import lombok.Getter;
 
+import java.util.Objects;
+
 @Getter
 public class Title {
     private final String title;
@@ -19,5 +21,18 @@ public class Title {
         if(title.length() > MAX_LENGTH) {
             throw new IllegalArgumentException("책 제목은 50자를 초과할 수 없습니다.");
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Title title1 = (Title) o;
+        return Objects.equals(getTitle(), title1.getTitle());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTitle());
     }
 }

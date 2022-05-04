@@ -37,8 +37,6 @@ class JdbcUserRepositoryTest {
                 .address(new Address("경기도 고양시"))
                 .password(new Password("pbm49431380@"))
                 .email(new Email("park1534@naver.com"))
-                .createdDateTime(LocalDateTime.now())
-                .modifiedDateTime(LocalDateTime.now())
                 .build();
         //when
         long savedId = userRepository.save(user);
@@ -56,8 +54,6 @@ class JdbcUserRepositoryTest {
                 .address(new Address("경기도 고양시"))
                 .password(new Password("pbm49431380@"))
                 .email(new Email("park1534@naver.com"))
-                .createdDateTime(now)
-                .modifiedDateTime(now)
                 .build();
         long savedId = userRepository.save(user);
         User updateUser = User.builder()
@@ -66,29 +62,24 @@ class JdbcUserRepositoryTest {
                 .address(new Address("서울 특별시"))
                 .password(new Password("pbm49431380@#"))
                 .email(new Email("kim123@naver.com"))
-                .createdDateTime(now)
-                .modifiedDateTime(now)
                 .build();
         //when
         int updatedRows = userRepository.update(updateUser);
         Optional<User> findUser = userRepository.findById(savedId);
         //then
         assertThat(updatedRows).isEqualTo(1);
-        assertThat(findUser.get()).usingRecursiveComparison().isEqualTo(updateUser);
+        assertThat(findUser.get().getEmail()).isEqualTo(updateUser.getEmail());
     }
 
     @Test
     void findByEmail() throws Exception {
         //given
-        LocalDateTime now = LocalDateTime.now().withNano(0);
         String email = "park1534@naver.com";
         User user = User.builder()
                 .name(new Name("park"))
                 .address(new Address("경기도 고양시"))
                 .password(new Password("pbm49431380@"))
                 .email(new Email(email))
-                .createdDateTime(now)
-                .modifiedDateTime(now)
                 .build();
         userRepository.save(user);
         //when
@@ -108,8 +99,6 @@ class JdbcUserRepositoryTest {
                 .address(new Address("경기도 고양시"))
                 .password(new Password(password))
                 .email(new Email(email))
-                .createdDateTime(now)
-                .modifiedDateTime(now)
                 .build();
         userRepository.save(user);
         //when

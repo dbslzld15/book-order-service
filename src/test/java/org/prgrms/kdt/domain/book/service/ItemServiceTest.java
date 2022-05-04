@@ -11,7 +11,6 @@ import org.prgrms.kdt.domain.book.vo.Price;
 
 import java.util.Optional;
 
-import static java.time.LocalDateTime.now;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -41,7 +40,7 @@ class ItemServiceTest {
     void getItemById() {
         //given
         long itemId = 1L;
-        Item item = new Item(now(), now(), itemId, new Price(1000L), 30);
+        Item item = new Item(itemId, new Price(1000L), 30);
         //when
         when(itemRepository.findById(anyLong())).thenReturn(Optional.of(item));
         Item findItem = itemService.getItemById(itemId);
@@ -55,7 +54,7 @@ class ItemServiceTest {
         long itemId = 1L;
         long price = 1000L;
         int stockQuantity = 20;
-        Item item = new Item(now(), now(), itemId, new Price(price), stockQuantity);
+        Item item = new Item(itemId, new Price(price), stockQuantity);
         //when
         when(itemRepository.findById(anyLong())).thenReturn(Optional.of(item));
         itemService.update(itemId, price, stockQuantity);
@@ -70,7 +69,7 @@ class ItemServiceTest {
         long itemId = 1L;
         long price = 1000L;
         int stockQuantity = 20;
-        Item item = new Item(now(), now(), itemId, new Price(price), stockQuantity);
+        Item item = new Item(itemId, new Price(price), stockQuantity);
         //when
         when(itemRepository.findById(anyLong())).thenReturn(Optional.of(item));
         itemService.remove(itemId);

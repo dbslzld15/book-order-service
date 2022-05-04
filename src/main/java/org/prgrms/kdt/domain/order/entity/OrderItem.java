@@ -5,7 +5,7 @@ import lombok.Getter;
 import org.prgrms.kdt.domain.book.vo.Price;
 import org.prgrms.kdt.global.model.BaseEntity;
 
-import java.time.LocalDateTime;
+import static java.time.LocalDateTime.now;
 
 @Getter
 public class OrderItem extends BaseEntity {
@@ -13,27 +13,18 @@ public class OrderItem extends BaseEntity {
     private Price totalPrice;
     private int orderQuantity;
     private long orderId;
-    private long bookId;
+    private long itemId;
     private static final int MIN_ORDER_QUANTITY = 1;
 
     @Builder
-    public OrderItem(LocalDateTime createdDateTime, LocalDateTime modifiedDateTime, long orderItemId, Price totalPrice, int orderQuantity, long orderId, long bookId) {
-        super(createdDateTime, modifiedDateTime);
+    public OrderItem(long orderItemId, Price totalPrice, int orderQuantity, long orderId, long itemId) {
+        super(now(), now());
         validateOrderQuantity(orderQuantity);
         this.orderItemId = orderItemId;
         this.totalPrice = totalPrice;
         this.orderQuantity = orderQuantity;
         this.orderId = orderId;
-        this.bookId = bookId;
-    }
-
-    @Builder
-    public OrderItem(LocalDateTime createdDateTime, LocalDateTime modifiedDateTime, Price totalPrice, int orderQuantity, long orderId, long bookId) {
-        super(createdDateTime, modifiedDateTime);
-        this.totalPrice = totalPrice;
-        this.orderQuantity = orderQuantity;
-        this.orderId = orderId;
-        this.bookId = bookId;
+        this.itemId = itemId;
     }
 
     private void validateOrderQuantity(int orderQuantity) {

@@ -34,8 +34,6 @@ public class UserService {
                 .name(new Name(request.getName()))
                 .address(new Address(request.getAddress()))
                 .email(new Email(request.getEmail()))
-                .createdDateTime(now())
-                .modifiedDateTime(now())
                 .build();
         return userRepository.save(user);
     }
@@ -49,8 +47,6 @@ public class UserService {
                 .name(user.getName())
                 .address(user.getAddress())
                 .password(new Password(request.getPassword()))
-                .createdDateTime(now())
-                .modifiedDateTime(now())
                 .build();
         userRepository.update(updateUser);
         log.info("update Password, user email: {}", request.getEmail());

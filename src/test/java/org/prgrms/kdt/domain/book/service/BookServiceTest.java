@@ -17,7 +17,6 @@ import org.prgrms.kdt.domain.user.vo.Name;
 import java.util.List;
 import java.util.Optional;
 
-import static java.time.LocalDateTime.now;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -56,16 +55,14 @@ class BookServiceTest {
                 .price(new Price(10000L))
                 .stockQuantity(20)
                 .itemId(1L)
-                .createdDateTime(now())
-                .modifiedDateTime(now()).build();
+                .build();
         Book secondBook = Book.builder()
                 .title(new Title("객체지향의 사실과 오해"))
                 .authorName(new Name("조영호"))
                 .price(new Price(20000L))
                 .stockQuantity(30)
                 .itemId(2L)
-                .createdDateTime(now())
-                .modifiedDateTime(now()).build();
+                .build();
         List<Book> books = List.of(firstBook, secondBook);
         //when
         when(bookRepository.findAll()).thenReturn(books);
@@ -85,8 +82,7 @@ class BookServiceTest {
                 .price(new Price(10000L))
                 .stockQuantity(20)
                 .itemId(1L)
-                .createdDateTime(now())
-                .modifiedDateTime(now()).build();
+                .build();
         //when
         when(bookRepository.findById(anyLong())).thenReturn(Optional.of(book));
         Book findBook = bookService.getBook(bookId);
@@ -107,10 +103,8 @@ class BookServiceTest {
                 .authorName(new Name("조영호"))
                 .price(new Price(10000L))
                 .stockQuantity(20)
-                .itemId(1L)
-                .createdDateTime(now())
-                .modifiedDateTime(now()).build();
-        Item item = new Item(now(), now(), 1L, new Price(price), stockQuantity);
+                .itemId(1L).build();
+        Item item = new Item(1L, new Price(price), stockQuantity);
         //when
         when(bookRepository.findById(anyLong())).thenReturn(Optional.of(book));
         when(itemService.getItemById(anyLong())).thenReturn(item);
@@ -132,9 +126,7 @@ class BookServiceTest {
                 .authorName(new Name("조영호"))
                 .price(new Price(10000L))
                 .stockQuantity(20)
-                .itemId(1L)
-                .createdDateTime(now())
-                .modifiedDateTime(now()).build();
+                .itemId(1L).build();
         //when
         when(bookRepository.findById(anyLong())).thenReturn(Optional.of(book));
         bookService.remove(bookId);

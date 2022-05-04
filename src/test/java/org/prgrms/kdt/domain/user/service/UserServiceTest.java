@@ -54,8 +54,6 @@ class UserServiceTest {
                 .address(new Address("서울 특별시"))
                 .password(new Password("pbm49431380@#"))
                 .email(new Email("kim123@naver.com"))
-                .createdDateTime(now)
-                .modifiedDateTime(now)
                 .build();
         UserPwResetRequest request = new UserPwResetRequest("park@naver.com", "park12345678@");
         //when
@@ -68,7 +66,6 @@ class UserServiceTest {
     @Test
     void getUserByLogin() throws Exception {
         //given
-        LocalDateTime now = LocalDateTime.now().withNano(0);
         String password = "pbm49431380@#";
         String email = "kim123@naver.com";
         User user = User.builder()
@@ -77,8 +74,6 @@ class UserServiceTest {
                 .address(new Address("서울 특별시"))
                 .password(new Password(password))
                 .email(new Email(email))
-                .createdDateTime(now)
-                .modifiedDateTime(now)
                 .build();
         UserLoginRequest request = new UserLoginRequest(email, password);
         //when

@@ -36,8 +36,6 @@ public class BookService {
                 .title(new Title(createRequest.getTitle()))
                 .authorName(new Name(createRequest.getAuthorName()))
                 .itemId(itemId)
-                .createdDateTime(now())
-                .modifiedDateTime(now())
                 .build();
         return bookRepository.save(book);
     }
@@ -62,8 +60,6 @@ public class BookService {
                 .title(new Title(updateRequest.getTitle()))
                 .authorName(new Name(updateRequest.getAuthorName()))
                 .itemId(item.getItemId())
-                .createdDateTime(now())
-                .modifiedDateTime(now())
                 .build();
         bookRepository.update(updateBook);
         log.info("update Book, book id: {}", book.getBookId());

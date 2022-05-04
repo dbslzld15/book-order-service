@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.prgrms.kdt.domain.book.vo.Price;
 import org.prgrms.kdt.global.model.BaseEntity;
 
-import java.time.LocalDateTime;
+import static java.time.LocalDateTime.now;
 
 @Getter
 public class Item extends BaseEntity {
@@ -14,16 +14,16 @@ public class Item extends BaseEntity {
     private static final int MIN_STOCK_QUANTITY = 0;
 
 
-    public Item(LocalDateTime createdDateTime, LocalDateTime modifiedDateTime, Long itemId, Price price, int stockQuantity) {
-        super(createdDateTime, modifiedDateTime);
+    public Item(Long itemId, Price price, int stockQuantity) {
+        super(now(), now());
         validateStockQuantity(stockQuantity);
         this.itemId = itemId;
         this.price = price;
         this.stockQuantity = stockQuantity;
     }
 
-    public Item(LocalDateTime createdDateTime, LocalDateTime modifiedDateTime, Price price, int stockQuantity) {
-        super(createdDateTime, modifiedDateTime);
+    public Item(Price price, int stockQuantity) {
+        super(now(), now());
         validateStockQuantity(stockQuantity);
         this.price = price;
         this.stockQuantity = stockQuantity;

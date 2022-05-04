@@ -108,8 +108,6 @@ public class JdbcUserRepository implements UserRepository{
         String email = rs.getString("email");
         String address = rs.getString("address");
         String role = rs.getString("role");
-        LocalDateTime createdAt = toLocalDateTime(rs.getTimestamp("created_at"));
-        LocalDateTime modifiedAt = toLocalDateTime(rs.getTimestamp("modified_at"));
 
         return User.builder()
                 .userId(userId)
@@ -117,8 +115,6 @@ public class JdbcUserRepository implements UserRepository{
                 .password(new Password(password))
                 .email(new Email(email))
                 .address(new Address(address))
-                .createdDateTime(createdAt)
-                .modifiedDateTime(modifiedAt)
                 .userRole(UserRole.valueOf(role))
                 .build();
     };

@@ -1,10 +1,11 @@
 package org.prgrms.kdt.global.model;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Getter
+@Getter @Setter
 public abstract class BaseEntity {
     private LocalDateTime createdDateTime;
     private LocalDateTime modifiedDateTime;

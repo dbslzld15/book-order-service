@@ -8,7 +8,6 @@ import org.prgrms.kdt.domain.book.vo.Price;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static java.time.LocalDateTime.now;
 import static org.prgrms.kdt.domain.book.exception.ItemExceptionType.ITEM_NOT_EXIST;
 
 @Slf4j
@@ -23,7 +22,7 @@ public class ItemService {
 
     @Transactional
     public long save(long price, int stockQuantity) {
-        Item item = new Item(now(), now(), new Price(price), stockQuantity);
+        Item item = new Item(new Price(price), stockQuantity);
         return itemRepository.save(item);
     }
 
@@ -36,7 +35,7 @@ public class ItemService {
     public void update(long itemId, long price, int stockQuantity) {
         itemRepository.findById(itemId)
                 .orElseThrow(() -> new ItemException(ITEM_NOT_EXIST));
-        Item item = new Item(now(), now(), itemId, new Price(price), stockQuantity);
+        Item item = new Item(itemId, new Price(price), stockQuantity);
         itemRepository.update(item);
         log.info("Update Item, item id: {}", itemId);
     }

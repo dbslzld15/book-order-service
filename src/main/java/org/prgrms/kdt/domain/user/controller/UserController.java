@@ -7,7 +7,6 @@ import org.prgrms.kdt.domain.user.request.UserPwResetRequest;
 import org.prgrms.kdt.domain.user.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
@@ -23,14 +22,14 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/join")
-    public String joinUser(@Valid @RequestBody UserCreateRequest createRequest) {
+    @PostMapping
+    public String joinUser(@Valid UserCreateRequest createRequest) {
         userService.save(createRequest);
         return "redirect:/users";
     }
 
     @PostMapping("/login")
-    public String login(@Valid @RequestBody UserLoginRequest loginRequest, HttpSession session) {
+    public String login(@Valid UserLoginRequest loginRequest, HttpSession session) {
         User user = userService.getUserByLogin(loginRequest);
         session.setAttribute("userId", user.getUserId());
         return "menu";
@@ -43,7 +42,7 @@ public class UserController {
     }
 
     @PostMapping("/reset")
-    public String resetPassword(@Valid @RequestBody UserPwResetRequest resetRequest){
+    public String resetPassword(@Valid UserPwResetRequest resetRequest){
         userService.updatePassword(resetRequest);
         return "redirect:/users";
     }

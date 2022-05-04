@@ -8,8 +8,6 @@ import org.prgrms.kdt.domain.book.vo.Price;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 import static java.time.LocalDateTime.now;
 import static org.prgrms.kdt.domain.book.exception.ItemExceptionType.ITEM_NOT_EXIST;
 

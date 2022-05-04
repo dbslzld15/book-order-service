@@ -2,10 +2,8 @@ package org.prgrms.kdt.domain.book.repository;
 
 import org.prgrms.kdt.domain.book.entity.Book;
 import org.prgrms.kdt.domain.book.exception.BookException;
-import org.prgrms.kdt.domain.book.exception.BookExceptionType;
+import org.prgrms.kdt.domain.book.vo.Price;
 import org.prgrms.kdt.domain.book.vo.Title;
-import org.prgrms.kdt.domain.user.entity.User;
-import org.prgrms.kdt.domain.user.exception.UserException;
 import org.prgrms.kdt.domain.user.vo.Name;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +17,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static org.prgrms.kdt.domain.book.exception.BookExceptionType.*;
+import static org.prgrms.kdt.domain.book.exception.BookExceptionType.BOOK_NOT_SAVED;
 import static org.prgrms.kdt.global.utils.Utils.toLocalDateTime;
 
 @Repository
@@ -49,14 +47,16 @@ public class JdbcBookRepository implements BookRepository{
 
     @Override
     public List<Book> findAll() {
-        return jdbcTemplate.query("SELECT * FROM book WHERE is_deleted = 'N'", Collections.emptyMap(), bookRowMapper);
+        return jdbcTemplate.query("SELECT * FROM book b JOIN item i on b.item_id = i.item_id " +
+                "WHERE b.is_deleted = 'N'", Collections.emptyMap(), bookRowMapper);
     }
 
     @Override
     public Optional<Book> findById(long bookId) {
         try {
-            Book book = jdbcTemplate.queryForObject("SELECT * FROM book " +
-                    "WHERE book_id = :bookId AND is_deleted = 'N'", Collections.singletonMap("bookId", bookId), bookRowMapper);
+            Book book = jdbcTemplate.queryForObject("SELECT * FROM book b JOIN item i on b.item_id = i.item_id " +
+                    "WHERE b.book_id = :bookId AND b.is_deleted = 'N'",
+                    Collections.singletonMap("bookId", bookId), bookRowMapper);
             return Optional.of(book);
         } catch (EmptyResultDataAccessException e) {
             log.error("입력받은 아이디에 해당하는 도서 정보가 존재하지 않습니다", e);
@@ -87,6 +87,8 @@ public class JdbcBookRepository implements BookRepository{
         String title = rs.getString("title");
         String authorName = rs.getString("author_name");
         long itemId = rs.getLong("item_id");
+        long price = rs.getLong("price");
+        int stockQuantity = rs.getInt("stock_quantity");
         LocalDateTime createdAt = toLocalDateTime(rs.getTimestamp("created_at"));
         LocalDateTime modifiedAt = toLocalDateTime(rs.getTimestamp("modified_at"));
 
@@ -95,6 +97,8 @@ public class JdbcBookRepository implements BookRepository{
                 .title(new Title(title))
                 .authorName(new Name(authorName))
                 .itemId(itemId)
+                .price(new Price(price))
+                .stockQuantity(stockQuantity)
                 .createdDateTime(createdAt)
                 .modifiedDateTime(modifiedAt)
                 .build();

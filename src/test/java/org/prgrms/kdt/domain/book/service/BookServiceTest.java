@@ -50,8 +50,22 @@ class BookServiceTest {
     @Test
     void getAllBooks() {
         //given
-        Book firstBook = new Book(now(), now(), 1L, new Title("객체지향"), new Name("조영호"), 1L);
-        Book secondBook = new Book(now(), now(), 2L, new Title("오브젝트"), new Name("조영호"), 2L);
+        Book firstBook = Book.builder()
+                .title(new Title("오브젝트"))
+                .authorName(new Name("조영호"))
+                .price(new Price(10000L))
+                .stockQuantity(20)
+                .itemId(1L)
+                .createdDateTime(now())
+                .modifiedDateTime(now()).build();
+        Book secondBook = Book.builder()
+                .title(new Title("객체지향의 사실과 오해"))
+                .authorName(new Name("조영호"))
+                .price(new Price(20000L))
+                .stockQuantity(30)
+                .itemId(2L)
+                .createdDateTime(now())
+                .modifiedDateTime(now()).build();
         List<Book> books = List.of(firstBook, secondBook);
         //when
         when(bookRepository.findAll()).thenReturn(books);
@@ -64,7 +78,15 @@ class BookServiceTest {
     void getBook() {
         //given
         long bookId = 1L;
-        Book book = new Book(now(), now(), bookId, new Title("객체지향"), new Name("조영호"), 1L);
+        Book book = Book.builder()
+                .bookId(bookId)
+                .title(new Title("오브젝트"))
+                .authorName(new Name("조영호"))
+                .price(new Price(10000L))
+                .stockQuantity(20)
+                .itemId(1L)
+                .createdDateTime(now())
+                .modifiedDateTime(now()).build();
         //when
         when(bookRepository.findById(anyLong())).thenReturn(Optional.of(book));
         Book findBook = bookService.getBook(bookId);
@@ -79,7 +101,15 @@ class BookServiceTest {
         long price = 10000L;
         int stockQuantity = 20;
         BookUpdateRequest request = new BookUpdateRequest("객체지향", "조영호", price, stockQuantity);
-        Book book = new Book(now(), now(), bookId, new Title("객체지향"), new Name("조영호"), 1L);
+        Book book = Book.builder()
+                .bookId(bookId)
+                .title(new Title("객체지향"))
+                .authorName(new Name("조영호"))
+                .price(new Price(10000L))
+                .stockQuantity(20)
+                .itemId(1L)
+                .createdDateTime(now())
+                .modifiedDateTime(now()).build();
         Item item = new Item(now(), now(), 1L, new Price(price), stockQuantity);
         //when
         when(bookRepository.findById(anyLong())).thenReturn(Optional.of(book));
@@ -96,7 +126,15 @@ class BookServiceTest {
     void remove() {
         //given
         long bookId = 1L;
-        Book book = new Book(now(), now(), bookId, new Title("객체지향"), new Name("조영호"), 1L);
+        Book book = Book.builder()
+                .bookId(bookId)
+                .title(new Title("객체지향"))
+                .authorName(new Name("조영호"))
+                .price(new Price(10000L))
+                .stockQuantity(20)
+                .itemId(1L)
+                .createdDateTime(now())
+                .modifiedDateTime(now()).build();
         //when
         when(bookRepository.findById(anyLong())).thenReturn(Optional.of(book));
         bookService.remove(bookId);

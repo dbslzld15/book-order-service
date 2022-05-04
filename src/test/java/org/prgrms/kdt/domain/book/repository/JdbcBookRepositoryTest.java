@@ -2,6 +2,8 @@ package org.prgrms.kdt.domain.book.repository;
 
 import org.junit.jupiter.api.Test;
 import org.prgrms.kdt.domain.book.entity.Book;
+import org.prgrms.kdt.domain.book.entity.Item;
+import org.prgrms.kdt.domain.book.vo.Price;
 import org.prgrms.kdt.domain.book.vo.Title;
 import org.prgrms.kdt.domain.user.vo.Name;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static java.time.LocalDateTime.now;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -20,6 +23,9 @@ class JdbcBookRepositoryTest {
 
     @Autowired
     JdbcBookRepository bookRepository;
+
+    @Autowired
+    JdbcItemRepository itemRepository;
 
     @Test
     void save() {
@@ -42,39 +48,46 @@ class JdbcBookRepositoryTest {
     @Test
     void findAll() {
         //given
-        LocalDateTime now = LocalDateTime.now();
-        Book book = Book.builder()
+        Item firstItem = new Item(now(), now(), new Price(10000L), 100);
+        long firstItemId = itemRepository.save(firstItem);
+        Item secondItem = new Item(now(), now(), new Price(5000L), 20);
+        long secondItemId = itemRepository.save(secondItem);
+        Book firstBook = Book.builder()
                 .title(new Title("객체지향의 사실과 오해"))
                 .authorName(new Name("조영호"))
-                .itemId(1L)
-                .createdDateTime(now)
-                .modifiedDateTime(now)
+                .itemId(firstItemId)
+                .createdDateTime(now())
+                .modifiedDateTime(now())
                 .build();
         Book secondBook = Book.builder()
                 .title(new Title("오브젝트"))
                 .authorName(new Name("조영호"))
-                .itemId(2L)
-                .createdDateTime(now)
-                .modifiedDateTime(now)
+                .itemId(secondItemId)
+                .createdDateTime(now())
+                .modifiedDateTime(now())
                 .build();
-        bookRepository.save(book);
+        bookRepository.save(firstBook);
         bookRepository.save(secondBook);
         //when
         List<Book> books = bookRepository.findAll();
         //then
         assertThat(books.size()).isEqualTo(2);
+        assertThat(books.get(0).getPrice().getPrice())
+                .isEqualTo(firstItem.getPrice().getPrice());
+        assertThat(books.get(0).getStockQuantity()).isEqualTo(firstItem.getStockQuantity());
     }
 
     @Test
     void findById() {
         //given
-        LocalDateTime now = LocalDateTime.now();
+        Item firstItem = new Item(now(), now(), new Price(10000L), 100);
+        long firstItemId = itemRepository.save(firstItem);
         Book book = Book.builder()
                 .title(new Title("객체지향의 사실과 오해"))
                 .authorName(new Name("조영호"))
-                .itemId(1L)
-                .createdDateTime(now)
-                .modifiedDateTime(now)
+                .itemId(firstItemId)
+                .createdDateTime(now())
+                .modifiedDateTime(now())
                 .build();
         long savedId = bookRepository.save(book);
         //when
@@ -82,6 +95,7 @@ class JdbcBookRepositoryTest {
         //then
         assertThat(findBook.get().getTitle()).isEqualTo(book.getTitle());
         assertThat(findBook.get().getAuthorName()).isEqualTo(book.getAuthorName());
+        assertThat(findBook.get().getStockQuantity()).isEqualTo(firstItem.getStockQuantity());
     }
 
     @Test

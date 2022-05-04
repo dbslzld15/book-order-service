@@ -2,25 +2,24 @@ package org.prgrms.kdt.domain.book.entity;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.prgrms.kdt.domain.book.vo.Price;
 import org.prgrms.kdt.domain.book.vo.Title;
 import org.prgrms.kdt.domain.user.vo.Name;
-import org.prgrms.kdt.global.model.BaseEntity;
 
 import java.time.LocalDateTime;
 
 @Getter
-public class Book extends BaseEntity {
+public class Book extends Item {
     private Long bookId;
     private Title title;
     private Name authorName;
-    private Long itemId;
 
     @Builder
-    public Book(LocalDateTime createdDateTime, LocalDateTime modifiedDateTime, Long bookId, Title title, Name authorName, Long itemId) {
-        super(createdDateTime, modifiedDateTime);
+    public Book(LocalDateTime createdDateTime, LocalDateTime modifiedDateTime,
+                Long itemId, Price price, int stockQuantity, Long bookId, Title title, Name authorName) {
+        super(createdDateTime, modifiedDateTime, itemId, price, stockQuantity);
         this.bookId = bookId;
         this.title = title;
         this.authorName = authorName;
-        this.itemId = itemId;
     }
 }

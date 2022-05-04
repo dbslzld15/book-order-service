@@ -20,7 +20,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -60,8 +60,9 @@ class UserServiceTest {
         UserPwResetRequest request = new UserPwResetRequest("park@naver.com", "park12345678@");
         //when
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
-        //then
         userService.updatePassword(request);
+        //then
+        verify(userRepository, times(1)).update(any());
     }
 
     @Test

@@ -30,7 +30,7 @@ class ItemServiceTest {
         //given
         long itemId = 1L;
         //when
-        when(itemRepository.save(any())).thenReturn(itemId);
+        when(itemRepository.insert(any())).thenReturn(itemId);
         long savedId = itemService.save(10000L, 20);
         //then
         assertThat(savedId).isEqualTo(itemId);

@@ -35,7 +35,7 @@ public class JdbcUserRepository implements UserRepository{
     }
 
     @Override
-    public long save(User user) {
+    public long insert(User user) {
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource source = toParameterSource(user);
         int savedRows = jdbcTemplate.update(

@@ -36,7 +36,7 @@ class JdbcBookRepositoryTest {
                 .itemId(1L)
                 .build();
         //when
-        long savedId = bookRepository.save(book);
+        long savedId = bookRepository.insert(book);
         Optional<Book> findBook = bookRepository.findById(savedId);
         //then
         assertThat(findBook.get().getTitle()).isEqualTo(book.getTitle());
@@ -46,9 +46,9 @@ class JdbcBookRepositoryTest {
     void findAll() {
         //given
         Item firstItem = new Item(new Price(10000L), 100);
-        long firstItemId = itemRepository.save(firstItem);
+        long firstItemId = itemRepository.insert(firstItem);
         Item secondItem = new Item(new Price(5000L), 20);
-        long secondItemId = itemRepository.save(secondItem);
+        long secondItemId = itemRepository.insert(secondItem);
         Book firstBook = Book.builder()
                 .title(new Title("객체지향의 사실과 오해"))
                 .authorName(new Name("조영호"))
@@ -59,8 +59,8 @@ class JdbcBookRepositoryTest {
                 .authorName(new Name("조영호"))
                 .itemId(secondItemId)
                 .build();
-        bookRepository.save(firstBook);
-        bookRepository.save(secondBook);
+        bookRepository.insert(firstBook);
+        bookRepository.insert(secondBook);
         //when
         List<Book> books = bookRepository.findAll();
         //then
@@ -74,13 +74,13 @@ class JdbcBookRepositoryTest {
     void findById() {
         //given
         Item firstItem = new Item(new Price(10000L), 100);
-        long firstItemId = itemRepository.save(firstItem);
+        long firstItemId = itemRepository.insert(firstItem);
         Book book = Book.builder()
                 .title(new Title("객체지향의 사실과 오해"))
                 .authorName(new Name("조영호"))
                 .itemId(firstItemId)
                 .build();
-        long savedId = bookRepository.save(book);
+        long savedId = bookRepository.insert(book);
         //when
         Optional<Book> findBook = bookRepository.findById(savedId);
         //then
@@ -98,7 +98,7 @@ class JdbcBookRepositoryTest {
                 .authorName(new Name("조영호"))
                 .itemId(1L)
                 .build();
-        long savedId = bookRepository.save(book);
+        long savedId = bookRepository.insert(book);
         Book updateBook = Book.builder()
                 .bookId(savedId)
                 .title(new Title("오브젝트"))
@@ -120,7 +120,7 @@ class JdbcBookRepositoryTest {
                 .authorName(new Name("조영호"))
                 .itemId(1L)
                 .build();
-        long savedId = bookRepository.save(book);
+        long savedId = bookRepository.insert(book);
         //when
         bookRepository.deleteById(savedId);
         //then
@@ -136,7 +136,7 @@ class JdbcBookRepositoryTest {
                 .authorName(new Name("조영호"))
                 .itemId(1L)
                 .build();
-        long savedId = bookRepository.save(book);
+        long savedId = bookRepository.insert(book);
         //when
         bookRepository.deleteAll();
         //then

@@ -37,7 +37,7 @@ public class BookService {
                 .authorName(new Name(createRequest.getAuthorName()))
                 .itemId(itemId)
                 .build();
-        return bookRepository.save(book);
+        return bookRepository.insert(book);
     }
 
     public List<Book> getAllBooks() {

@@ -23,7 +23,7 @@ public class ItemService {
     @Transactional
     public long save(long price, int stockQuantity) {
         Item item = new Item(new Price(price), stockQuantity);
-        return itemRepository.save(item);
+        return itemRepository.insert(item);
     }
 
     public Item getItemById(Long itemId) {

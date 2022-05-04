@@ -35,7 +35,7 @@ public class UserService {
                 .address(new Address(request.getAddress()))
                 .email(new Email(request.getEmail()))
                 .build();
-        return userRepository.save(user);
+        return userRepository.insert(user);
     }
 
     @Transactional

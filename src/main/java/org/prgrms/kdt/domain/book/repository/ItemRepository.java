@@ -8,7 +8,7 @@ public interface ItemRepository {
 
     Optional<Item> findById(long itemId);
 
-    long save(Item item);
+    long insert(Item item);
 
     long update(Item item);
 

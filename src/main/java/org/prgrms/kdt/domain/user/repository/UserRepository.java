@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface UserRepository {
 
-    long save(User user);
+    long insert(User user);
 
     int update(User user);
 

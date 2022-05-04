@@ -31,7 +31,7 @@ public class JdbcBookRepository implements BookRepository{
     }
 
     @Override
-    public long save(Book book) {
+    public long insert(Book book) {
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource source = toParameterSource(book);
         int savedRows = jdbcTemplate.update(

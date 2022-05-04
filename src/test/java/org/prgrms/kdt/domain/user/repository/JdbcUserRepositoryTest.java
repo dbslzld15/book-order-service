@@ -1,7 +1,6 @@
 package org.prgrms.kdt.domain.user.repository;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.prgrms.kdt.domain.user.entity.User;
 import org.prgrms.kdt.domain.user.vo.Address;
@@ -39,7 +38,7 @@ class JdbcUserRepositoryTest {
                 .email(new Email("park1534@naver.com"))
                 .build();
         //when
-        long savedId = userRepository.save(user);
+        long savedId = userRepository.insert(user);
         Optional<User> findUser = userRepository.findById(savedId);
         //then
         assertThat(findUser.get().getEmail()).isEqualTo(user.getEmail());
@@ -55,7 +54,7 @@ class JdbcUserRepositoryTest {
                 .password(new Password("pbm49431380@"))
                 .email(new Email("park1534@naver.com"))
                 .build();
-        long savedId = userRepository.save(user);
+        long savedId = userRepository.insert(user);
         User updateUser = User.builder()
                 .userId(savedId)
                 .name(new Name("kim"))
@@ -81,7 +80,7 @@ class JdbcUserRepositoryTest {
                 .password(new Password("pbm49431380@"))
                 .email(new Email(email))
                 .build();
-        userRepository.save(user);
+        userRepository.insert(user);
         //when
         Optional<User> findUser = userRepository.findByEmail(email);
         //then
@@ -100,7 +99,7 @@ class JdbcUserRepositoryTest {
                 .password(new Password(password))
                 .email(new Email(email))
                 .build();
-        userRepository.save(user);
+        userRepository.insert(user);
         //when
         Optional<User> findUser = userRepository.findByEmailAndPassword(email, password);
         //then

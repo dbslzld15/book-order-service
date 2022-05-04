@@ -32,7 +32,7 @@ public class JdbcItemRepository implements ItemRepository {
     }
 
     @Override
-    public long save(Item item) {
+    public long insert(Item item) {
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource source = toParameterSource(item);
         int savedRows = jdbcTemplate.update(

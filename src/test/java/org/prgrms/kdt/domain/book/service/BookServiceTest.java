@@ -40,7 +40,7 @@ class BookServiceTest {
         BookCreateRequest request = new BookCreateRequest(
                 "객체지향", "조영호", 10000L, 10);
         //when
-        when(bookRepository.save(any())).thenReturn(bookId);
+        when(bookRepository.insert(any())).thenReturn(bookId);
         long savedId = bookService.save(request);
         //then
         assertThat(savedId).isEqualTo(bookId);

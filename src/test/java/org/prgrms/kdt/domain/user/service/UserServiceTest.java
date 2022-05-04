@@ -38,7 +38,7 @@ class UserServiceTest {
         UserCreateRequest request = new UserCreateRequest(
                 "park", "park@naver.com", "경기도 고양시 일산동구");
         //when
-        when(userRepository.save(any())).thenReturn(customerId);
+        when(userRepository.insert(any())).thenReturn(customerId);
         long savedId = userService.save(request);
         //then
         assertThat(savedId).isEqualTo(customerId);

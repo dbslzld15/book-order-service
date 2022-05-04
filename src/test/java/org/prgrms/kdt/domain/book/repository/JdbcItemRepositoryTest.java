@@ -25,7 +25,7 @@ class JdbcItemRepositoryTest {
         LocalDateTime now = LocalDateTime.now().withNano(0);
         Item item = new Item(1L, new Price(1000L), 30);
         //when
-        long savedId = itemRepository.save(item);
+        long savedId = itemRepository.insert(item);
         Optional<Item> findItem = itemRepository.findById(savedId);
         //then
         assertThat(findItem.get().getPrice()).isEqualTo(item.getPrice());
@@ -36,7 +36,7 @@ class JdbcItemRepositoryTest {
         //given
         LocalDateTime now = LocalDateTime.now().withNano(0);
         Item item = new Item(1L, new Price(1000L), 30);
-        long savedId = itemRepository.save(item);
+        long savedId = itemRepository.insert(item);
         Item updateItem = new Item(1L, new Price(9000L), 20);
         //when
         long updatedRows = itemRepository.update(updateItem);
@@ -49,7 +49,7 @@ class JdbcItemRepositoryTest {
         //given
         LocalDateTime now = LocalDateTime.now().withNano(0);
         Item item = new Item(1L, new Price(1000L), 30);
-        long savedId = itemRepository.save(item);
+        long savedId = itemRepository.insert(item);
         //when
         itemRepository.deleteById(savedId);
         Optional<Item> findItem = itemRepository.findById(savedId);
@@ -62,7 +62,7 @@ class JdbcItemRepositoryTest {
         //given
         LocalDateTime now = LocalDateTime.now().withNano(0);
         Item item = new Item(1L, new Price(1000L), 30);
-        long savedId = itemRepository.save(item);
+        long savedId = itemRepository.insert(item);
         //when
         itemRepository.deleteAll();
         Optional<Item> findItem = itemRepository.findById(savedId);

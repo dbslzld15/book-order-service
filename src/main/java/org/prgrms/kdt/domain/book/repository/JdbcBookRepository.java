@@ -49,14 +49,14 @@ public class JdbcBookRepository implements BookRepository{
 
     @Override
     public List<Book> findAll() {
-        return jdbcTemplate.query("SELECT * FROM book", Collections.emptyMap(), bookRowMapper);
+        return jdbcTemplate.query("SELECT * FROM book WHERE is_deleted = 'N'", Collections.emptyMap(), bookRowMapper);
     }
 
     @Override
     public Optional<Book> findById(long bookId) {
         try {
             Book book = jdbcTemplate.queryForObject("SELECT * FROM book " +
-                    "WHERE book_id = :bookId", Collections.singletonMap("bookId", bookId), bookRowMapper);
+                    "WHERE book_id = :bookId AND is_deleted = 'N'", Collections.singletonMap("bookId", bookId), bookRowMapper);
             return Optional.of(book);
         } catch (EmptyResultDataAccessException e) {
             log.error("입력받은 아이디에 해당하는 도서 정보가 존재하지 않습니다", e);
@@ -73,7 +73,7 @@ public class JdbcBookRepository implements BookRepository{
 
     @Override
     public void deleteById(long bookId) {
-        jdbcTemplate.update("DELETE FROM book WHERE book_id = :bookId",
+        jdbcTemplate.update("UPDATE book SET is_deleted = 'Y' WHERE book_id = :bookId",
                 Collections.singletonMap("bookId", bookId));
     }
 

@@ -50,7 +50,7 @@ public class JdbcItemRepository implements ItemRepository {
     public Optional<Item> findById(long itemId) {
         try {
             Item item = jdbcTemplate.queryForObject("SELECT * FROM item " +
-                    "WHERE item_id = :itemId", Collections.singletonMap("itemId", itemId), itemRowMapper);
+                    "WHERE item_id = :itemId AND is_deleted = 'N'", Collections.singletonMap("itemId", itemId), itemRowMapper);
             return Optional.of(item);
         } catch (EmptyResultDataAccessException e) {
             log.error("입력받은 아이디에 해당하는 도서 정보가 존재하지 않습니다", e);
@@ -67,7 +67,7 @@ public class JdbcItemRepository implements ItemRepository {
 
     @Override
     public void deleteById(long itemId) {
-        jdbcTemplate.update("DELETE FROM item WHERE item_id = :itemId",
+        jdbcTemplate.update("UPDATE item SET is_deleted = 'Y' WHERE item_id = :itemId",
                 Collections.singletonMap("itemId", itemId));
     }
 

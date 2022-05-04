@@ -2,6 +2,7 @@ package org.prgrms.kdt.domain.user.repository;
 
 import lombok.extern.slf4j.Slf4j;
 import org.prgrms.kdt.domain.user.entity.User;
+import org.prgrms.kdt.domain.user.entity.UserRole;
 import org.prgrms.kdt.domain.user.exception.UserException;
 import org.prgrms.kdt.domain.user.vo.Address;
 import org.prgrms.kdt.domain.user.vo.Email;
@@ -59,7 +60,7 @@ public class JdbcUserRepository implements UserRepository{
     public Optional<User> findByEmail(String email) {
         try {
             User user = jdbcTemplate.queryForObject("SELECT * FROM user " +
-                    "WHERE email = :email", Collections.singletonMap("email", email), userRowMapper);
+                    "WHERE email = :email AND is_deleted = 'N'", Collections.singletonMap("email", email), userRowMapper);
             return Optional.of(user);
         } catch (EmptyResultDataAccessException e) {
             log.error("입력받은 이메일에 해당하는 고객 정보가 존재하지 않습니다", e);
@@ -71,7 +72,7 @@ public class JdbcUserRepository implements UserRepository{
     public Optional<User> findById(long userId) {
         try {
             User user = jdbcTemplate.queryForObject("SELECT * FROM user " +
-                    "WHERE user_id = :userId", Collections.singletonMap("userId", userId), userRowMapper);
+                    "WHERE user_id = :userId AND is_deleted = 'N'", Collections.singletonMap("userId", userId), userRowMapper);
             return Optional.of(user);
         } catch (EmptyResultDataAccessException e) {
             log.error("입력받은 아이디에 해당하는 고객 정보가 존재하지 않습니다", e);
@@ -87,7 +88,7 @@ public class JdbcUserRepository implements UserRepository{
             paramMap.put("password", password);
 
             User user = jdbcTemplate.queryForObject("SELECT * FROM user " +
-                    "WHERE email = :email AND password = :password", paramMap, userRowMapper);
+                    "WHERE email = :email AND password = :password AND is_deleted = 'N'", paramMap, userRowMapper);
             return Optional.of(user);
         } catch (EmptyResultDataAccessException e) {
             log.error("입력받은 이메일에 해당하는 고객 정보가 존재하지 않습니다", e);
@@ -106,6 +107,7 @@ public class JdbcUserRepository implements UserRepository{
         String password = rs.getString("password");
         String email = rs.getString("email");
         String address = rs.getString("address");
+        String role = rs.getString("role");
         LocalDateTime createdAt = toLocalDateTime(rs.getTimestamp("created_at"));
         LocalDateTime modifiedAt = toLocalDateTime(rs.getTimestamp("modified_at"));
 
@@ -117,6 +119,7 @@ public class JdbcUserRepository implements UserRepository{
                 .address(new Address(address))
                 .createdDateTime(createdAt)
                 .modifiedDateTime(modifiedAt)
+                .userRole(UserRole.valueOf(role))
                 .build();
     };
 

@@ -82,14 +82,7 @@ public class JdbcItemRepository implements ItemRepository {
         int stockQuantity = rs.getInt("stock_quantity");
         LocalDateTime createdAt = toLocalDateTime(rs.getTimestamp("created_at"));
         LocalDateTime modifiedAt = toLocalDateTime(rs.getTimestamp("modified_at"));
-
-        return Item.builder()
-                .itemId(itemId)
-                .price(new Price(price))
-                .stockQuantity(stockQuantity)
-                .createdDateTime(createdAt)
-                .modifiedDateTime(modifiedAt)
-                .build();
+        return new Item(createdAt, modifiedAt, itemId, new Price(price), stockQuantity);
     };
 
     private MapSqlParameterSource toParameterSource(Item item) {

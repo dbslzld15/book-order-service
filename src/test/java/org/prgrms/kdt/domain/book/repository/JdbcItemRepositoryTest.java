@@ -23,13 +23,7 @@ class JdbcItemRepositoryTest {
     void save() {
         //given
         LocalDateTime now = LocalDateTime.now().withNano(0);
-        Item item = Item.builder()
-                .price(new Price(1000L))
-                .stockQuantity(30)
-                .itemId(1L)
-                .createdDateTime(now)
-                .modifiedDateTime(now)
-                .build();
+        Item item = new Item(now, now, 1L, new Price(1000L), 30);
         //when
         long savedId = itemRepository.save(item);
         Optional<Item> findItem = itemRepository.findById(savedId);
@@ -41,22 +35,9 @@ class JdbcItemRepositoryTest {
     void update() {
         //given
         LocalDateTime now = LocalDateTime.now().withNano(0);
-        Item item = Item.builder()
-                .price(new Price(1000L))
-                .stockQuantity(30)
-                .itemId(1L)
-                .createdDateTime(now)
-                .modifiedDateTime(now)
-                .build();
+        Item item = new Item(now, now, 1L, new Price(1000L), 30);
         long savedId = itemRepository.save(item);
-        Item updateItem = Item.builder()
-                .itemId(savedId)
-                .price(new Price(9000L))
-                .stockQuantity(20)
-                .itemId(1L)
-                .createdDateTime(now)
-                .modifiedDateTime(now)
-                .build();
+        Item updateItem = new Item(now, now, 1L, new Price(9000L), 20);
         //when
         long updatedRows = itemRepository.update(updateItem);
         //then
@@ -67,13 +48,7 @@ class JdbcItemRepositoryTest {
     void deleteById() {
         //given
         LocalDateTime now = LocalDateTime.now().withNano(0);
-        Item item = Item.builder()
-                .price(new Price(1000L))
-                .stockQuantity(30)
-                .itemId(1L)
-                .createdDateTime(now)
-                .modifiedDateTime(now)
-                .build();
+        Item item = new Item(now, now, 1L, new Price(1000L), 30);
         long savedId = itemRepository.save(item);
         //when
         itemRepository.deleteById(savedId);
@@ -86,13 +61,7 @@ class JdbcItemRepositoryTest {
     void deleteAll() {
         //given
         LocalDateTime now = LocalDateTime.now().withNano(0);
-        Item item = Item.builder()
-                .price(new Price(1000L))
-                .stockQuantity(30)
-                .itemId(1L)
-                .createdDateTime(now)
-                .modifiedDateTime(now)
-                .build();
+        Item item = new Item(now, now, 1L, new Price(1000L), 30);
         long savedId = itemRepository.save(item);
         //when
         itemRepository.deleteAll();

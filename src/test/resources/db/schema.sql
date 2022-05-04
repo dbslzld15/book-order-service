@@ -7,6 +7,8 @@ CREATE TABLE user
     password VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL,
     address VARCHAR(200) NOT NULL,
+    role ENUM('USER', 'ADMIN') default 'USER',
+    is_deleted ENUM('Y', 'N') DEFAULT 'N',
     created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
     modified_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT unq_user_email UNIQUE (email)
@@ -21,6 +23,7 @@ CREATE TABLE orders
     order_status ENUM('ACCEPTED', 'SHIPPED', 'CANCELED'),
     order_date datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
     user_id BIGINT NOT NULL,
+    is_deleted ENUM('Y', 'N') DEFAULT 'N',
     created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
     modified_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -34,6 +37,7 @@ CREATE TABLE order_item
     order_quantity INT NOT NULL,
     order_id BIGINT NOT NULL,
     item_id BIGINT NOT NULL,
+    is_deleted ENUM('Y', 'N') DEFAULT 'N',
     created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
     modified_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -48,6 +52,7 @@ CREATE TABLE item
     item_id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,
     price bigint NOT NULL,
     stock_quantity INT NOT NULL,
+    is_deleted ENUM('Y', 'N') DEFAULT 'N',
     created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
     modified_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -60,6 +65,7 @@ CREATE TABLE book
     title VARCHAR(100) NOT NULL,
     author_name VARCHAR(20) NOT NULL,
     item_id bigint NOT NULL,
+    is_deleted ENUM('Y', 'N') DEFAULT 'N',
     created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
     modified_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )

@@ -17,15 +17,18 @@ public class User extends BaseEntity {
     private Password password;
     private Email email;
     private Address address;
+    private UserRole userRole;
 
     @Builder
     public User(LocalDateTime createdDateTime, LocalDateTime modifiedDateTime,
-                long userId, Name name, Password password, Email email, Address address) {
+                Long userId, Name name, Password password, Email email,
+                Address address, UserRole userRole) {
         super(createdDateTime, modifiedDateTime);
         this.userId = userId;
         this.name = name;
         this.password = password;
         this.email = email;
         this.address = address;
+        this.userRole = userRole == null ? UserRole.USER: userRole;
     }
 }

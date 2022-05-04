@@ -1,14 +1,14 @@
 package org.prgrms.kdt.domain.book.request;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Getter @Setter
 public class BookUpdateRequest {
     @NotBlank

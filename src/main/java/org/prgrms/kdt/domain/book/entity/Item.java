@@ -1,6 +1,5 @@
 package org.prgrms.kdt.domain.book.entity;
 
-import lombok.Builder;
 import lombok.Getter;
 import org.prgrms.kdt.domain.book.vo.Price;
 import org.prgrms.kdt.global.model.BaseEntity;
@@ -14,11 +13,18 @@ public class Item extends BaseEntity {
     private int stockQuantity;
     private static final int MIN_STOCK_QUANTITY = 0;
 
-    @Builder
-    public Item(LocalDateTime createdDateTime, LocalDateTime modifiedDateTime, long itemId, Price price, int stockQuantity) {
+
+    public Item(LocalDateTime createdDateTime, LocalDateTime modifiedDateTime, Long itemId, Price price, int stockQuantity) {
         super(createdDateTime, modifiedDateTime);
         validateStockQuantity(stockQuantity);
         this.itemId = itemId;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+    }
+
+    public Item(LocalDateTime createdDateTime, LocalDateTime modifiedDateTime, Price price, int stockQuantity) {
+        super(createdDateTime, modifiedDateTime);
+        validateStockQuantity(stockQuantity);
         this.price = price;
         this.stockQuantity = stockQuantity;
     }

@@ -23,12 +23,7 @@ public class ItemService {
 
     @Transactional
     public long save(long price, int stockQuantity) {
-        Item item = Item.builder()
-                .price(new Price(price))
-                .stockQuantity(stockQuantity)
-                .createdDateTime(now())
-                .modifiedDateTime(now())
-                .build();
+        Item item = new Item(now(), now(), new Price(price), stockQuantity);
         return itemRepository.save(item);
     }
 
@@ -41,13 +36,7 @@ public class ItemService {
     public void update(long itemId, long price, int stockQuantity) {
         itemRepository.findById(itemId)
                 .orElseThrow(() -> new ItemException(ITEM_NOT_EXIST));
-        Item item = Item.builder()
-                .itemId(itemId)
-                .price(new Price(price))
-                .stockQuantity(stockQuantity)
-                .createdDateTime(now())
-                .modifiedDateTime(now())
-                .build();
+        Item item = new Item(now(), now(), itemId, new Price(price), stockQuantity);
         itemRepository.update(item);
         log.info("Update Item, item id: {}", itemId);
     }

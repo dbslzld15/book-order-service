@@ -41,7 +41,7 @@ class ItemServiceTest {
     void getItemById() {
         //given
         long itemId = 1L;
-        Item item = new Item(now(), now(), itemId, new Price(10000L), 20);
+        Item item = new Item(now(), now(), itemId, new Price(1000L), 30);
         //when
         when(itemRepository.findById(anyLong())).thenReturn(Optional.of(item));
         Item findItem = itemService.getItemById(itemId);

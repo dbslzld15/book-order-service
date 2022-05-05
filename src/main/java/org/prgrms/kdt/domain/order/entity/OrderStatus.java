@@ -1,4 +1,4 @@
-package org.prgrms.kdt.domain.order.vo;
+package org.prgrms.kdt.domain.order.entity;
 
 public enum OrderStatus {
     ACCEPTED,

@@ -14,12 +14,12 @@ import org.prgrms.kdt.domain.user.vo.Password;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static java.time.LocalDateTime.now;
 import static org.prgrms.kdt.domain.user.exception.UserExceptionType.USER_NOT_EXIST;
 import static org.prgrms.kdt.domain.user.exception.UserExceptionType.USER_PASSWORD_INCORRECT;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 public class UserService {
 
     private final UserRepository userRepository;
@@ -52,7 +52,6 @@ public class UserService {
         log.info("update Password, user email: {}", request.getEmail());
     }
 
-    @Transactional
     public User getUserByLogin(UserLoginRequest request) {
         userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UserException(USER_NOT_EXIST));

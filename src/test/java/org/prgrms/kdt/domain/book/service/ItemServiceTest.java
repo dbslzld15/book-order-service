@@ -43,7 +43,7 @@ class ItemServiceTest {
         Item item = new Item(itemId, new Price(1000L), 30);
         //when
         when(itemRepository.findById(anyLong())).thenReturn(Optional.of(item));
-        Item findItem = itemService.getItemById(itemId);
+        Item findItem = itemService.getByItemId(itemId);
         //then
         assertThat(findItem).usingRecursiveComparison().isEqualTo(item);
     }

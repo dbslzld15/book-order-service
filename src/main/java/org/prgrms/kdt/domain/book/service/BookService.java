@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static java.time.LocalDateTime.now;
 import static org.prgrms.kdt.domain.book.exception.BookExceptionType.BOOK_NOT_EXIST;
 
 @Service
@@ -53,7 +52,7 @@ public class BookService {
     public void update(long bookId, BookUpdateRequest updateRequest) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new BookException(BOOK_NOT_EXIST));
-        Item item = itemService.getItemById(book.getItemId());
+        Item item = itemService.getByItemId(book.getItemId());
 
         itemService.update(item.getItemId(), updateRequest.getPrice(), updateRequest.getStockQuantity());
         Book updateBook = Book.builder()

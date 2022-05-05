@@ -26,7 +26,7 @@ public class ItemService {
         return itemRepository.insert(item);
     }
 
-    public Item getItemById(Long itemId) {
+    public Item getByItemId(Long itemId) {
         return itemRepository.findById(itemId)
                 .orElseThrow(() -> new ItemException(ITEM_NOT_EXIST));
     }

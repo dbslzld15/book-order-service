@@ -107,11 +107,11 @@ class BookServiceTest {
         Item item = new Item(1L, new Price(price), stockQuantity);
         //when
         when(bookRepository.findById(anyLong())).thenReturn(Optional.of(book));
-        when(itemService.getItemById(anyLong())).thenReturn(item);
+        when(itemService.getByItemId(anyLong())).thenReturn(item);
         bookService.update(bookId, request);
         //then
         verify(bookRepository, times(1)).findById(anyLong());
-        verify(itemService, times(1)).getItemById(anyLong());
+        verify(itemService, times(1)).getByItemId(anyLong());
         verify(itemService, times(1)).update(anyLong(), anyLong(), anyInt());
         verify(bookRepository, times(1)).update(any());
     }

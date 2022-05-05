@@ -1,12 +1,11 @@
 package org.prgrms.kdt.domain.book.repository;
 
+import lombok.extern.slf4j.Slf4j;
 import org.prgrms.kdt.domain.book.entity.Book;
 import org.prgrms.kdt.domain.book.exception.BookException;
 import org.prgrms.kdt.domain.book.vo.Price;
 import org.prgrms.kdt.domain.book.vo.Title;
 import org.prgrms.kdt.domain.user.vo.Name;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -14,16 +13,14 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.prgrms.kdt.domain.book.exception.BookExceptionType.BOOK_NOT_SAVED;
-import static org.prgrms.kdt.global.utils.Utils.toLocalDateTime;
 
+@Slf4j
 @Repository
 public class JdbcBookRepository implements BookRepository{
 
-    private static final Logger log = LoggerFactory.getLogger(JdbcBookRepository.class);
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     public JdbcBookRepository(NamedParameterJdbcTemplate jdbcTemplate) {

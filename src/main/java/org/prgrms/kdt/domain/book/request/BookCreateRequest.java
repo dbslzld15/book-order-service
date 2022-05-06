@@ -11,14 +11,14 @@ import javax.validation.constraints.Positive;
 @AllArgsConstructor
 @Getter @Setter
 public class BookCreateRequest {
-    @NotBlank
+    @NotBlank(message = "도서명은 필수 입력입니다.")
     private String title;
-    @NotBlank
+    @NotBlank(message = "저자명은 필수 입력입니다.")
     private String authorName;
-    @NotNull
-    @Positive
+    @NotNull(message = "금액은 필수 입력입니다.")
+    @Positive(message = "금액은 음수가 될 수 없습니다.")
     private long price;
-    @NotNull
-    @Positive
+    @NotNull(message = "재고수량은 필수 입력입니다.")
+    @Positive(message = "재고수량은 음수가 될 수 없습니다.")
     private int stockQuantity;
 }

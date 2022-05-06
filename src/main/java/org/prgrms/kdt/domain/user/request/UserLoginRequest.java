@@ -10,9 +10,9 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @Getter @Setter
 public class UserLoginRequest {
-    @NotBlank
-    @Email
+    @NotBlank(message = "이메일은 필수 입력값입니다.")
+    @Email(message = "이메일 형식에 맞춰주세요.")
     private String email;
-    @NotBlank
+    @NotBlank(message = "비밀번호는 필수 입력값입니다.")
     private String password;
 }

@@ -1,21 +1,21 @@
 package org.prgrms.kdt.domain.user.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.prgrms.kdt.domain.user.entity.User;
+import org.prgrms.kdt.domain.user.entity.UserRole;
 import org.prgrms.kdt.domain.user.request.UserCreateRequest;
 import org.prgrms.kdt.domain.user.request.UserLoginRequest;
 import org.prgrms.kdt.domain.user.request.UserPwResetRequest;
 import org.prgrms.kdt.domain.user.service.UserService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+@Slf4j
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -32,46 +32,40 @@ public class UserController {
     }
 
     @GetMapping("/join")
-    public String userJoinPage(Model model) {
-        model.addAttribute("createRequest", new UserCreateRequest());
+    public String userJoinPage() {
         return "users/join";
     }
 
-    @GetMapping("/pwreset")
+    @GetMapping("/reset")
     public String userPwResetPage() {
-        return "users/pwreset";
+        return "users/reset";
     }
 
     @PostMapping("/join")
-    public String joinUser(@ModelAttribute("createRequest") @Valid UserCreateRequest createRequest,
-                           BindingResult bindingResult) {
-        if(bindingResult.hasErrors()){
-            return"/users/join";
-        }
+    public void joinUser(@Valid UserCreateRequest createRequest) {
         userService.save(createRequest);
-        return "redirect:/";
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute("loginRequest") @Valid UserLoginRequest loginRequest,
-                        BindingResult bindingResult, HttpSession session) {
-        if(bindingResult.hasErrors()) {
-            return "/users/login";
-        }
+    public String login(@Valid UserLoginRequest loginRequest, HttpSession session) {
         User user = userService.getUserByLogin(loginRequest);
         session.setAttribute("userId", user.getUserId());
-        return "menu";
+        if(user.getUserRole() == UserRole.USER) {
+            return "redirect:/books";
+        } else {
+            return "admin";
+        }
     }
 
     @PostMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/users";
+        return "redirect:/";
     }
 
     @PostMapping("/reset")
     public String resetPassword(@Valid UserPwResetRequest resetRequest){
         userService.updatePassword(resetRequest);
-        return "redirect:/users";
+        return "redirect:/";
     }
 }

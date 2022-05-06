@@ -1,11 +1,9 @@
 package org.prgrms.kdt.domain.book.controller;
 
 import org.prgrms.kdt.domain.book.entity.Book;
-import org.prgrms.kdt.domain.book.entity.Item;
 import org.prgrms.kdt.domain.book.request.BookCreateRequest;
 import org.prgrms.kdt.domain.book.request.BookUpdateRequest;
 import org.prgrms.kdt.domain.book.service.BookService;
-import org.prgrms.kdt.domain.book.service.ItemService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,11 +16,9 @@ import java.util.List;
 public class BookController {
 
     private final BookService bookService;
-    private final ItemService itemService;
 
-    public BookController(BookService bookService, ItemService itemService) {
+    public BookController(BookService bookService) {
         this.bookService = bookService;
-        this.itemService = itemService;
     }
 
     @GetMapping
@@ -32,18 +28,28 @@ public class BookController {
         return "books/list";
     }
 
-    @PostMapping
+    @GetMapping("/admin")
+    public String getAllAdminBooks(Model model) {
+        List<Book> books = bookService.getAllBooks();
+        model.addAttribute("books", books);
+        return "books/admin_list";
+    }
+
+    @GetMapping("/new")
+    public String createBookPage() {
+        return "books/new";
+    }
+
+    @PostMapping("/new")
     public String createBook(@Valid BookCreateRequest createRequest) {
         bookService.save(createRequest);
-        return "redirect:/books";
+        return "books/admin_list";
     }
 
     @GetMapping("/{bookId}")
     public String getBook(Model model, @PathVariable long bookId) {
         Book book = bookService.getBook(bookId);
-        Item item = itemService.getByItemId(book.getItemId());
         model.addAttribute("book", book);
-        model.addAttribute("item", item);
         return "books/detail";
     }
 
@@ -51,13 +57,12 @@ public class BookController {
     public String modifyBook(
             @PathVariable long bookId, @Valid BookUpdateRequest updateRequest) {
         bookService.update(bookId, updateRequest);
-        return "redirect:/books";
+        return "books/admin_list";
     }
 
     @DeleteMapping("/{bookId}")
-    public String deleteBook(@PathVariable long bookId) {
+    public void deleteBook(@PathVariable long bookId) {
         bookService.remove(bookId);
-        return "redirect:/books";
     }
 
 }

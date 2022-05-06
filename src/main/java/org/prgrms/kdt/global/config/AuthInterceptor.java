@@ -14,7 +14,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         String userId = (String) request.getSession().getAttribute("userId");
 
         if(userId == null) {
-            response.sendRedirect("/users");
+            response.sendRedirect("/");
             return false;
         } else {
             return true;

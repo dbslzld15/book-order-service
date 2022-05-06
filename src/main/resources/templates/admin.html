@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head th:replace="fragments/header :: header"></head>
+<body class="container-fluid">
+<div class="d-grid gap-3" style="width: 700px; margin: 0 auto;">
+    <h2 style="text-align: center">관리자 페이지</h2>
+    <a onclick="goBookPage()" class="btn btn-outline-primary" type="button">도서 관리</a>
+</div>
+<script>
+    function goBookPage() {
+        location.href = "/books/admin";
+    }
+</script>
+</body>
+</html>

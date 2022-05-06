@@ -1,0 +1,48 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en">
+<head th:replace="fragments/header :: header"></head>
+<body class="container-fluid">
+<h5><b>도서 목록</b></h5>
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th scope="col">상품 아이디</th>
+        <th scope="col">도서 아이디</th>
+        <th scope="col">도서명</th>
+        <th scope="col">저자</th>
+        <th scope="col">가격</th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr id="books" th:each="book: ${books}" th:object="${book}">
+        <td th:text="*{itemId}"></td>
+        <td id="bookId" th:text="*{bookId}"></td>
+        <td th:text="*{title.getTitle()}"></td>
+        <td th:text="*{authorName.getName()}"></td>
+        <td th:text="*{price.getPrice()}"></td>
+        <td>
+            <input th:value="담기" onclick="cartBook()" class="btn btn-outline-danger" type="button"/>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    function cartBook() {
+        var bookId = $('#books').find("td:eq(1)").text();
+        console.log(bookId);
+        $.ajax({
+            type: "DELETE",
+            url: "/books/" + bookId,
+            error: function (request) {
+                alert(request.responseText);
+            }
+        }).done(function () {
+            window.location.reload();
+        });
+    }
+</script>
+</body>
+</html>

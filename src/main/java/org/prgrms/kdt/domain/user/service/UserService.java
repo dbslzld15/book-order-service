@@ -47,6 +47,7 @@ public class UserService {
                 .userId(user.getUserId())
                 .name(user.getName())
                 .address(user.getAddress())
+                .email(new Email(request.getEmail()))
                 .password(new Password(request.getPassword()))
                 .build();
         userRepository.update(updateUser);

@@ -32,6 +32,7 @@ public class UserService {
     public long save(UserCreateRequest request) {
         User user = User.builder()
                 .name(new Name(request.getName()))
+                .password(new Password(request.getPassword()))
                 .address(new Address(request.getAddress()))
                 .email(new Email(request.getEmail()))
                 .build();

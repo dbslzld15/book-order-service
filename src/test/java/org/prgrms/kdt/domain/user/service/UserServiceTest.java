@@ -36,7 +36,7 @@ class UserServiceTest {
         //given
         Long customerId = 1L;
         UserCreateRequest request = new UserCreateRequest(
-                "park", "park@naver.com", "경기도 고양시 일산동구");
+                "park", "1234@pbm12345", "park@naver.com", "경기도 고양시 일산동구");
         //when
         when(userRepository.insert(any())).thenReturn(customerId);
         long savedId = userService.save(request);

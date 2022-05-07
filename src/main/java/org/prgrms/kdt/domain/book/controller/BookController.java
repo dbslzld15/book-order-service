@@ -4,10 +4,13 @@ import org.prgrms.kdt.domain.book.entity.Book;
 import org.prgrms.kdt.domain.book.request.BookCreateRequest;
 import org.prgrms.kdt.domain.book.request.BookUpdateRequest;
 import org.prgrms.kdt.domain.book.service.BookService;
+import org.prgrms.kdt.domain.user.entity.User;
+import org.prgrms.kdt.domain.user.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -16,15 +19,20 @@ import java.util.List;
 public class BookController {
 
     private final BookService bookService;
+    private final UserService userService;
 
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, UserService userService) {
         this.bookService = bookService;
+        this.userService = userService;
     }
 
     @GetMapping
-    public String getAllBooks(Model model) {
+    public String getAllBooks(Model model, HttpSession session) {
+        long userId = Long.parseLong(String.valueOf(session.getAttribute("userId")));
+        User user = userService.getUserById(userId);
         List<Book> books = bookService.getAllBooks();
         model.addAttribute("books", books);
+        model.addAttribute("address", user.getAddress().getAddress());
         return "books/list";
     }
 
@@ -61,8 +69,9 @@ public class BookController {
     }
 
     @DeleteMapping("/{bookId}")
-    public void deleteBook(@PathVariable long bookId) {
+    public String deleteBook(@PathVariable long bookId) {
         bookService.remove(bookId);
+        return "books/admin_list";
     }
 
 }

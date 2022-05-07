@@ -15,14 +15,12 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import static org.prgrms.kdt.domain.user.exception.UserExceptionType.USER_NOT_SAVED;
-import static org.prgrms.kdt.global.utils.Utils.toLocalDateTime;
 
 @Slf4j
 @Repository

@@ -1,0 +1,61 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en">
+<head th:replace="fragments/header :: header"></head>
+<body class="container-fluid">
+<h2 style="text-align: center">주문 상세정보</h2>
+<form th:object="${order}" id="form" style="width: 800px; margin: 0 auto;">
+    <div class="mb-3">
+        <label for="orderId" class="form-label">주문 아이디</label>
+        <input th:value="*{orderId}" th:disabled="disabled" type="text" id="orderId" name="orderId" class="form-control"/>
+    </div>
+    <div class="mb-3">
+        <label for="address" class="form-label">주소</label>
+        <input th:value="*{address.getAddress()}" type="text" id="address" name="address" class="form-control"/>
+    </div>
+    <div class="mb-3">
+        <label for="orderStatus" class="form-label">주문 상태</label>
+        <select id="orderStatus" name="orderStatus" class="form-select">
+            <option th:each="status: ${orderStatus}" th:text="${status.getValue()}" th:value="${status}"
+                    th:selected="${status.getValue()}==${order.orderStatus.getValue()}"></option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="userId" class="form-label">유저 아이디</label>
+        <input th:value="*{userId}" type="text" name="userId" id="userId" class="form-control" required/>
+    </div>
+    <div class="mb-3">
+        <label for="orderDateTime" class="form-label">주문 날짜</label>
+        <input th:value="${#temporals.format(order.orderDateTime, 'yyyy-MM-dd HH:mm')}" type="text" name="orderDateTime" id="orderDateTime" class="form-control"/>
+    </div>
+    <div class="mb-3">
+        <label for="createdDateTime" class="form-label">생성 날짜</label>
+        <input th:value="${#temporals.format(order.createdDateTime, 'yyyy-MM-dd HH:mm')}" th:disabled="disabled" type="text" name="createdDateTime" id="createdDateTime" class="form-control"/>
+    </div>
+    <div class="mb-3">
+        <label for="modifiedDateTime" class="form-label">수정 날짜</label>
+        <input th:value="${#temporals.format(order.modifiedDateTime, 'yyyy-MM-dd HH:mm')}" th:disabled="disabled" type="text" name="modifiedDateTime" id="modifiedDateTime" class="form-control"/>
+        <input th:value="수정하기" onclick="update()" type="button" class="btn btn-success" style="margin-top: 10px"/>
+    </div>
+</form>
+
+<script>
+    function update() {
+        var updateRequest = $('#form').serialize();
+        var orderId = $('#orderId').val();
+        $.ajax({
+            type: "PUT",
+            url: "/orders/" + orderId,
+            data: updateRequest,
+            success: function () {
+                location.href = '/orders/admin';
+            },
+            error: function (request) {
+                alert(request.responseText);
+            }
+        })
+    }
+</script>
+
+</body>
+</html>

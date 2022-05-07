@@ -1,0 +1,69 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en">
+<head th:replace="fragments/header :: header"></head>
+<body class="container-fluid">
+<h5><b>주문 목록</b></h5>
+<table class="table table-bordered">
+    <thead class="thead-light">
+    <tr class="table-dark">
+        <th scope="col">주문 아이디</th>
+        <th scope="col">유저 아이디</th>
+        <th scope="col">도서 명</th>
+        <th scope="col">저자</th>
+        <th scope="col">주문 주소</th>
+        <th scope="col">주문 상태</th>
+        <th scope="col">가격</th>
+        <th scope="col">주문 날짜</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody th:each="order: ${orders}">
+    <tr id="orders" th:each="orderItem: ${order.getOrderItems()}" class="table-light" style="border-bottom: darkgray">
+        <td th:text="*{order.orderId}"></td>
+        <td th:text="*{order.userId}"></td>
+        <td th:text="*{orderItem.book.title.getTitle()}"></td>
+        <td th:text="*{orderItem.book.authorName.getName()}"></td>
+        <td th:text="*{order.getAddress().address}"></td>
+        <td th:text="*{order.orderStatus.getValue()}"></td>
+        <td th:text="*{orderItem.book.price.getPrice()}"></td>
+        <td th:text="*{#temporals.format(order.getOrderDateTime(), 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:if="${orderItem == order.getOrderItems().get(order.getOrderItems().size()-1)}">
+            <a th:href="@{/orders/{orderId}(orderId=*{order.orderId})}"
+               class="btn btn-outline-primary" type="button">주문 수정</a>
+        </td>
+        <td th:unless="${orderItem == order.getOrderItems().get(order.getOrderItems().size()-1)}"></td>
+        <td th:if="${orderItem == order.getOrderItems().get(order.getOrderItems().size()-1)}">
+            <a th:id="'delete_' + *{order.orderId}" type="button" class="btn btn-outline-danger"
+                   onclick="deleteOrder(this)">주문 삭제</a>
+        </td>
+        <td th:unless="${orderItem == order.getOrderItems().get(order.getOrderItems().size()-1)}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="text-center mt-3">
+    <a onclick="history.go(-1)" class="btn btn-outline-primary" type="button">이전 페이지 이동</a>
+</div>
+<script>
+    function deleteOrder(obj) {
+        var orderId = obj.id.split('_')[1];
+        console.log(orderId);
+        $.ajax({
+            type: "DELETE",
+            url: "/orders/" + orderId,
+            success: function () {
+                alert("주문 삭제가 완료되었습니다.");
+                location.href = 'orders/admin'
+            },
+            error: function (request) {
+                alert(request.responseText);
+            }
+        }).done(function () {
+            window.location.reload();
+        });
+    }
+</script>
+</body>
+</html>

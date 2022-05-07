@@ -11,6 +11,8 @@ public interface BookRepository {
 
     Optional<Book> findById(long bookId);
 
+    Optional<Book> findByItemId(Long itemId);
+
     long insert(Book book);
 
     int update(Book book);

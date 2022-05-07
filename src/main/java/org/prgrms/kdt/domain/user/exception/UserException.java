@@ -1,7 +1,7 @@
 package org.prgrms.kdt.domain.user.exception;
 
 public class UserException extends RuntimeException {
-    private int statusCode;
+    private final int statusCode;
 
     public UserException(UserExceptionType userExceptionType) {
         super(userExceptionType.getMsg());

@@ -1,5 +1,8 @@
 package org.prgrms.kdt.global.exception;
 
+import org.prgrms.kdt.domain.book.exception.BookException;
+import org.prgrms.kdt.domain.book.exception.ItemException;
+import org.prgrms.kdt.domain.order.exception.OrderException;
 import org.prgrms.kdt.domain.user.exception.UserException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,27 @@ public class ExceptionAdvisor{
 
     @ExceptionHandler(UserException.class)
     public ResponseEntity<ErrorResponse> handleUserException(UserException e) {
+        int statusCode = e.getStatusCode();
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.resolve(statusCode));
+    }
+
+    @ExceptionHandler(OrderException.class)
+    public ResponseEntity<ErrorResponse> handleOrderException(OrderException e) {
+        int statusCode = e.getStatusCode();
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.resolve(statusCode));
+    }
+
+    @ExceptionHandler(BookException.class)
+    public ResponseEntity<ErrorResponse> handleBookException(BookException e) {
+        int statusCode = e.getStatusCode();
+        ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.resolve(statusCode));
+    }
+
+    @ExceptionHandler(ItemException.class)
+    public ResponseEntity<ErrorResponse> handleItemException(ItemException e) {
         int statusCode = e.getStatusCode();
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.resolve(statusCode));

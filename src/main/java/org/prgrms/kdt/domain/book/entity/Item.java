@@ -13,7 +13,6 @@ public class Item extends BaseEntity {
     private int stockQuantity;
     private static final int MIN_STOCK_QUANTITY = 0;
 
-
     public Item(Long itemId, Price price, int stockQuantity) {
         super(now(), now());
         validateStockQuantity(stockQuantity);

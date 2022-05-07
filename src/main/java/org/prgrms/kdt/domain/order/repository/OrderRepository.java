@@ -16,4 +16,6 @@ public interface OrderRepository {
     void deleteById(long orderId);
 
     int update(Order order);
+
+    List<Order> findAll();
 }

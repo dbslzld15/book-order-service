@@ -1,6 +1,5 @@
 package org.prgrms.kdt.domain.user.controller;
 
-import lombok.extern.slf4j.Slf4j;
 import org.prgrms.kdt.domain.user.entity.User;
 import org.prgrms.kdt.domain.user.entity.UserRole;
 import org.prgrms.kdt.domain.user.request.UserCreateRequest;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-@Slf4j
 @Controller
 @RequestMapping("/users")
 public class UserController {

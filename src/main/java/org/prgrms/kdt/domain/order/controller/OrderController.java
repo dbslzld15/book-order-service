@@ -22,30 +22,37 @@ public class OrderController {
     }
 
     @PostMapping
-    public String createOrder(@Valid OrderCreateRequest createRequest, HttpSession session) {
-        long userId = (long) session.getAttribute("userId");
+    public String createOrder(@Valid @RequestBody OrderCreateRequest createRequest, HttpSession session) {
+        long userId = Long.parseLong(String.valueOf(session.getAttribute("userId")));
         orderService.save(userId, createRequest);
-        return "redirect:/orders";
+        return "redirect:/orders/history";
     }
 
-    @PutMapping("/cancel/{orderId}")
+    @PostMapping("/cancel/{orderId}")
     public String cancelOrder(@PathVariable long orderId){
         orderService.cancel(orderId);
-        return "redirect:/orders";
+        return "redirect:/orders/history";
     }
 
     @DeleteMapping("/{orderId}")
     public String removeOrder(@PathVariable long orderId) {
         orderService.remove(orderId);
-        return "redirect:/orders";
+        return "orders/admin_list";
     }
 
     @GetMapping("/history")
     public String getUserOrderHistory(Model model, HttpSession session) {
-        long userId = (long) session.getAttribute("userId");
+        long userId = Long.parseLong(String.valueOf(session.getAttribute("userId")));
         List<Order> orders = orderService.getHistory(userId);
         model.addAttribute("orders", orders);
-        return "orders/history";
+        return "orders/order_history";
+    }
+
+    @GetMapping("/admin")
+    public String getAllAdminOrders(Model model) {
+        List<Order> orders = orderService.getAllOrders();
+        model.addAttribute("orders", orders);
+        return "orders/admin_list";
     }
 
 }

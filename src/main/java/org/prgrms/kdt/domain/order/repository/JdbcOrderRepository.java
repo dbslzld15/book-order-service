@@ -45,16 +45,22 @@ public class JdbcOrderRepository implements OrderRepository {
 
     @Override
     public int update(Order order) {
-        return jdbcTemplate.update("UPDATE order " +
+        return jdbcTemplate.update("UPDATE orders " +
                 "SET address = :address, order_status = :orderStatus, order_date = :orderDate, user_id = :userId " +
                 "WHERE order_id = :orderId", toParamMap(order));
     }
 
     @Override
+    public List<Order> findAll() {
+        return jdbcTemplate.query("SELECT * FROM orders " +
+                "WHERE is_deleted = 'N'", Collections.emptyMap(), orderRowMapper);
+    }
+
+    @Override
     public Optional<Order> findById(long orderId) {
         try {
-            Order order = jdbcTemplate.queryForObject("SELECT * FROM order WHERE order_id = :orderId AND is_deleted = 'N'",
-                    Collections.singletonMap("order_id", orderId), orderRowMapper);
+            Order order = jdbcTemplate.queryForObject("SELECT * FROM orders WHERE order_id = :orderId AND is_deleted = 'N'",
+                    Collections.singletonMap("orderId", orderId), orderRowMapper);
             return Optional.of(order);
         } catch (EmptyResultDataAccessException e) {
             log.error("입력받은 아이디에 해당하는 주문 정보가 존재하지 않습니다", e);
@@ -64,13 +70,13 @@ public class JdbcOrderRepository implements OrderRepository {
 
     @Override
     public List<Order> findAllByUserId(long userId) {
-        return jdbcTemplate.query("SELECT * FROM order WHERE user_id = :userId AND is_deleted = 'N'",
+        return jdbcTemplate.query("SELECT * FROM orders WHERE user_id = :userId AND is_deleted = 'N'",
                 Collections.singletonMap("userId", userId), orderRowMapper);
     }
 
     @Override
     public void deleteById(long orderId) {
-        jdbcTemplate.update("UPDATE order SET is_deleted = 'Y' WHERE order_id = :orderId",
+        jdbcTemplate.update("UPDATE orders SET is_deleted = 'Y' WHERE order_id = :orderId",
                 Collections.singletonMap("orderId", orderId));
     }
 
@@ -95,7 +101,9 @@ public class JdbcOrderRepository implements OrderRepository {
                 .addValue("address", order.getAddress().getAddress())
                 .addValue("orderStatus", order.getOrderStatus().toString())
                 .addValue("orderDate", order.getOrderDateTime())
-                .addValue("userId", order.getUserId());
+                .addValue("userId", order.getUserId())
+                .addValue("createdAt", order.getCreatedDateTime())
+                .addValue("modifiedAt", order.getModifiedDateTime());
         return parameters;
     }
 
@@ -106,6 +114,9 @@ public class JdbcOrderRepository implements OrderRepository {
         paramMap.put("orderStatus", order.getOrderStatus().toString());
         paramMap.put("orderDate", order.getOrderDateTime());
         paramMap.put("userId", order.getUserId());
+        paramMap.put("createdAt", order.getCreatedDateTime());
+        paramMap.put("modifiedAt", order.getModifiedDateTime());
+
         return paramMap;
     }
 }

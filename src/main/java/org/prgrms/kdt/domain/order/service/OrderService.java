@@ -1,7 +1,6 @@
 package org.prgrms.kdt.domain.order.service;
 
 import org.prgrms.kdt.domain.book.entity.Item;
-import org.prgrms.kdt.domain.book.service.BookService;
 import org.prgrms.kdt.domain.book.service.ItemService;
 import org.prgrms.kdt.domain.order.entity.Order;
 import org.prgrms.kdt.domain.order.entity.OrderItem;
@@ -27,7 +26,7 @@ public class OrderService {
     private final OrderItemService orderItemService;
     private final ItemService itemService;
 
-    public OrderService(OrderRepository orderRepository, OrderItemService orderItemService, BookService bookService, ItemService itemService) {
+    public OrderService(OrderRepository orderRepository, OrderItemService orderItemService, ItemService itemService) {
         this.orderRepository = orderRepository;
         this.orderItemService = orderItemService;
         this.itemService = itemService;
@@ -35,7 +34,7 @@ public class OrderService {
 
     @Transactional
     public void save(long userId, OrderCreateRequest createRequest) {
-        List<OrderItemCreateRequest> orderItems = createRequest.getOrderItemsRequest();
+        List<OrderItemCreateRequest> orderItems = createRequest.getOrderItems();
         checkRemainStocks(orderItems);
         Order order = Order.builder()
                 .userId(userId)
@@ -68,7 +67,12 @@ public class OrderService {
     }
 
     public List<Order> getHistory(long userId) {
-        return orderRepository.findAllByUserId(userId);
+        List<Order> orders = orderRepository.findAllByUserId(userId);
+        orders.forEach(order -> {
+            List<OrderItem> orderItems = orderItemService.getAllByOrderId(order.getOrderId());
+            order.setOrderItems(orderItems);
+        });
+        return orders;
     }
 
     @Transactional
@@ -98,5 +102,14 @@ public class OrderService {
             Item item = itemService.getByItemId(orderItem.getItemId());
             itemService.update(item.getItemId(), item.getPrice().getPrice(), item.getStockQuantity() + orderQuantity);
         });
+    }
+
+    public List<Order> getAllOrders() {
+        List<Order> orders = orderRepository.findAll();
+        orders.forEach(order -> {
+            List<OrderItem> orderItems = orderItemService.getAllByOrderId(order.getOrderId());
+            order.setOrderItems(orderItems);
+        });
+        return orders;
     }
 }

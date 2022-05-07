@@ -1,7 +1,9 @@
 package org.prgrms.kdt.domain.order.controller;
 
 import org.prgrms.kdt.domain.order.entity.Order;
+import org.prgrms.kdt.domain.order.entity.OrderStatus;
 import org.prgrms.kdt.domain.order.request.OrderCreateRequest;
+import org.prgrms.kdt.domain.order.request.OrderUpdateRequest;
 import org.prgrms.kdt.domain.order.service.OrderService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +34,20 @@ public class OrderController {
     public String cancelOrder(@PathVariable long orderId){
         orderService.cancel(orderId);
         return "redirect:/orders/history";
+    }
+
+    @GetMapping("/{orderId}")
+    public String getOrder(@PathVariable long orderId, Model model) {
+        Order order = orderService.getOrderById(orderId);
+        model.addAttribute("order", order);
+        model.addAttribute("orderStatus", OrderStatus.values());
+        return "orders/detail";
+    }
+
+    @PutMapping("/{orderId}")
+    public String modifyOrder(@PathVariable long orderId, @Valid OrderUpdateRequest updateRequest) {
+        orderService.update(orderId, updateRequest);
+        return "orders/admin_list";
     }
 
     @DeleteMapping("/{orderId}")

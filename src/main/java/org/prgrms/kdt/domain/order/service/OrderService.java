@@ -1,5 +1,6 @@
 package org.prgrms.kdt.domain.order.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.prgrms.kdt.domain.book.entity.Item;
 import org.prgrms.kdt.domain.book.service.ItemService;
 import org.prgrms.kdt.domain.order.entity.Order;
@@ -8,6 +9,7 @@ import org.prgrms.kdt.domain.order.exception.OrderException;
 import org.prgrms.kdt.domain.order.repository.OrderRepository;
 import org.prgrms.kdt.domain.order.request.OrderCreateRequest;
 import org.prgrms.kdt.domain.order.request.OrderItemCreateRequest;
+import org.prgrms.kdt.domain.order.request.OrderUpdateRequest;
 import org.prgrms.kdt.domain.user.vo.Address;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,7 @@ import static java.time.LocalDateTime.now;
 import static org.prgrms.kdt.domain.order.entity.OrderStatus.*;
 import static org.prgrms.kdt.domain.order.exception.OrderExceptionType.*;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 public class OrderService {
@@ -64,6 +67,7 @@ public class OrderService {
                 .build();
         orderRepository.update(canceledOrder);
         restock(orderId);
+        log.info("cancel order, order id: {}", orderId);
     }
 
     public List<Order> getHistory(long userId) {
@@ -75,6 +79,20 @@ public class OrderService {
         return orders;
     }
 
+    public List<Order> getAllOrders() {
+        List<Order> orders = orderRepository.findAll();
+        orders.forEach(order -> {
+            List<OrderItem> orderItems = orderItemService.getAllByOrderId(order.getOrderId());
+            order.setOrderItems(orderItems);
+        });
+        return orders;
+    }
+
+    public Order getOrderById(long orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new OrderException(ORDER_NOT_EXIST));
+    }
+
     @Transactional
     public void remove(long orderId) {
         orderRepository.findById(orderId)
@@ -82,6 +100,20 @@ public class OrderService {
         orderRepository.deleteById(orderId);
         List<OrderItem> orderItems = orderItemService.getAllByOrderId(orderId);
         orderItems.forEach(orderItem -> orderItemService.remove(orderItem.getOrderItemId()));
+        log.info("delete order, order id: {}", orderId);
+    }
+
+    @Transactional
+    public void update(long orderId, OrderUpdateRequest updateRequest) {
+        Order order = Order.builder()
+                .orderId(orderId)
+                .orderStatus(updateRequest.getOrderStatus())
+                .orderDateTime(updateRequest.getOrderDateTime())
+                .userId(updateRequest.getUserId())
+                .address(new Address(updateRequest.getAddress()))
+                .build();
+        orderRepository.update(order);
+        log.info("update order, order id: {}", orderId);
     }
 
     private void checkRemainStocks(List<OrderItemCreateRequest> orderItems) {
@@ -102,14 +134,5 @@ public class OrderService {
             Item item = itemService.getByItemId(orderItem.getItemId());
             itemService.update(item.getItemId(), item.getPrice().getPrice(), item.getStockQuantity() + orderQuantity);
         });
-    }
-
-    public List<Order> getAllOrders() {
-        List<Order> orders = orderRepository.findAll();
-        orders.forEach(order -> {
-            List<OrderItem> orderItems = orderItemService.getAllByOrderId(order.getOrderId());
-            order.setOrderItems(orderItems);
-        });
-        return orders;
     }
 }

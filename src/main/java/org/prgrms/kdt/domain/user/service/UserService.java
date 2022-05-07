@@ -60,4 +60,9 @@ public class UserService {
         return userRepository.findByEmailAndPassword(request.getEmail(), request.getPassword())
                 .orElseThrow(() -> new UserException(USER_PASSWORD_INCORRECT));
     }
+
+    public User getUserById(long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(USER_NOT_EXIST));
+    }
 }

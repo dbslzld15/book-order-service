@@ -5,10 +5,14 @@
 <div class="d-grid gap-3" style="width: 700px; margin: 0 auto;">
     <h2 style="text-align: center">관리자 페이지</h2>
     <a onclick="goBookPage()" class="btn btn-outline-primary" type="button">도서 관리</a>
+    <a onclick="goOrderPage()" class="btn btn-outline-secondary" type="button">주문 관리</a>
 </div>
 <script>
     function goBookPage() {
         location.href = "/books/admin";
+    }
+    function goOrderPage() {
+        location.href = "/orders/admin";
     }
 </script>
 </body>

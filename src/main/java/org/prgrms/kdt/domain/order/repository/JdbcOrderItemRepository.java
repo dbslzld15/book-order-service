@@ -42,7 +42,7 @@ public class JdbcOrderItemRepository implements OrderItemRepository{
 
     @Override
     public List<OrderItem> findByOrderId(long orderId) {
-        return jdbcTemplate.query("SELECT * FROM order_item WHERE order_id = :orderId AND is_deleted = :'N'",
+        return jdbcTemplate.query("SELECT * FROM order_item WHERE order_id = :orderId AND is_deleted = 'N'",
                 Collections.singletonMap("orderId", orderId), orderItemRowMapper);
     }
 
@@ -70,20 +70,24 @@ public class JdbcOrderItemRepository implements OrderItemRepository{
 
     private MapSqlParameterSource toParameterSource(OrderItem orderItem) {
         MapSqlParameterSource parameters = new MapSqlParameterSource()
-                .addValue("totalPrice", orderItem.getTotalPrice())
+                .addValue("totalPrice", orderItem.getTotalPrice().getPrice())
                 .addValue("orderQuantity", orderItem.getOrderQuantity())
                 .addValue("orderId", orderItem.getOrderId())
-                .addValue("itemId", orderItem.getItemId());
+                .addValue("itemId", orderItem.getItemId())
+                .addValue("createdAt", orderItem.getCreatedDateTime())
+                .addValue("modifiedAt", orderItem.getModifiedDateTime());
         return parameters;
     }
 
     private Map<String, Object> toParamMap(OrderItem orderItem) {
         HashMap<String, Object> paramMap = new HashMap<>();
         paramMap.put("orderItemId", orderItem.getOrderItemId());
-        paramMap.put("totalPrice", orderItem.getTotalPrice());
+        paramMap.put("totalPrice", orderItem.getTotalPrice().getPrice());
         paramMap.put("orderQuantity", orderItem.getOrderQuantity());
         paramMap.put("orderId", orderItem.getOrderId());
         paramMap.put("itemId", orderItem.getItemId());
+        paramMap.put("createdAt", orderItem.getCreatedDateTime());
+        paramMap.put("modifiedAt", orderItem.getModifiedDateTime());
         return paramMap;
     }
 }

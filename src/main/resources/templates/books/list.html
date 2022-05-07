@@ -3,45 +3,136 @@
 <html lang="en">
 <head th:replace="fragments/header :: header"></head>
 <body class="container-fluid">
-<h5><b>도서 목록</b></h5>
+<div>
+    <h5 style="text-align: left"><b>도서 목록</b></h5>
+    <p style="text-align: right">
+        <button onclick="logout()" class="btn btn-outline-primary" type="button">로그아웃</button>
+        <a th:href="@{/orders/history}" class="btn btn-outline-primary" type="button">나의 주문 내역</a>
+    </p>
+</div>
+
 <table class="table table-hover">
     <thead>
     <tr>
-        <th scope="col">상품 아이디</th>
-        <th scope="col">도서 아이디</th>
+        <th scope="col">선택</th>
         <th scope="col">도서명</th>
         <th scope="col">저자</th>
         <th scope="col">가격</th>
-        <th scope="col"></th>
+        <th scope="col">주문 수량</th>
+        <th scope="col">주문 금액</th>
     </tr>
     </thead>
     <tbody>
     <tr id="books" th:each="book: ${books}" th:object="${book}">
-        <td th:text="*{itemId}"></td>
-        <td id="bookId" th:text="*{bookId}"></td>
+        <td>
+            <input type="checkbox" name="orderChkBox" th:value="*{itemId}">
+        </td>
         <td th:text="*{title.getTitle()}"></td>
         <td th:text="*{authorName.getName()}"></td>
-        <td th:text="*{price.getPrice()}"></td>
+        <td th:data="*{price.getPrice()}" th:id="'price_' + *{itemId}" th:text="*{price.getPrice()} + '원'"></td>
         <td>
-            <input th:value="담기" onclick="cartBook()" class="btn btn-outline-danger" type="button"/>
+            <input type="number" th:value="1" min="1" name="orderQuantity" th:id="'orderQuantity_' + *{itemId}" onchange="changeQuantity(this)">
         </td>
+        <td th:id="'totalPrice_' + *{itemId}" th:name="totalPrice" th:text="*{price.getPrice()} + '원'"></td>
     </tr>
     </tbody>
 </table>
 
+<h5 class="text-center">
+    총 주문 금액 : <span id="orderTotalPrice" class="text-danger">0원</span>
+</h5>
+
+<table style="margin: 0 auto">
+    <tr>
+        <th>배송주소</th>
+        <td><input type="text" th:value="*{address}" name="address" id="address" class="form-control" placeholder="배송 받을 주소를 입력해주세요" style="width: 800px; margin-left: 10px"/></td>
+    </tr>
+</table>
+
+<div class="text-center mt-3">
+    <button type="button" class="btn btn-secondary btn-lg" onclick="orders()">주문하기</button>
+</div>
+
 <script>
-    function cartBook() {
-        var bookId = $('#books').find("td:eq(1)").text();
-        console.log(bookId);
+    $(document).ready(function(){
+        $("input[name=orderChkBox]").change( function(){
+            getOrderTotalPrice();
+        });
+    });
+
+    function logout() {
         $.ajax({
-            type: "DELETE",
-            url: "/books/" + bookId,
+            type: "POST",
+            url: "/users/logout",
+            success: function () {
+                alert("로그아웃 되었습니다.");
+                location.href = '/'
+            },
             error: function (request) {
                 alert(request.responseText);
             }
-        }).done(function () {
-            window.location.reload();
+        })
+    }
+
+    // 총 주문 금액을 구하는 func
+    function getOrderTotalPrice(){
+        var orderTotalPrice = 0;
+        $("input[name=orderChkBox]:checked").each(function() {
+            var itemId = $(this).val();
+            var price = $("#price_" + itemId).attr("data");
+            var count = $("#orderQuantity_" + itemId).val();
+            orderTotalPrice += price*count;
         });
+
+        $("#orderTotalPrice").html(orderTotalPrice+'원');
+    }
+
+    //상품 개수에 따른 금액 변경 func
+    function changeQuantity(obj){
+        var count = obj.value;
+        var itemId = obj.id.split('_')[1];
+        var price = $("#price_" + itemId).attr("data");
+        var totalPrice = count*price;
+        $("#totalPrice_" + itemId).html(totalPrice + "원");
+        getOrderTotalPrice();
+    }
+
+    function orders() {
+        var orderItemList = new Array();
+        var createRequest = new Object();
+        var address = $("#address").val();
+
+        $("input[name=orderChkBox]:checked").each(function() {
+            var itemId = $(this).val();
+            var totalPrice = $("#totalPrice_" + itemId).text().replace("원", "");
+            var orderQuantity = $("#orderQuantity_" + itemId).val();
+            var orderItem = new Object();
+            orderItem["itemId"] = itemId;
+            orderItem["totalPrice"] = totalPrice;
+            orderItem["orderQuantity"] = orderQuantity;
+            orderItemList.push(orderItem);
+        });
+
+        console.log(orderItemList);
+
+        createRequest['address'] = address;
+        createRequest['orderItems'] = orderItemList;
+
+        console.log(createRequest);
+
+        $.ajax({
+            type: "POST",
+            url: "/orders",
+            contentType: "application/json",
+            data: JSON.stringify(createRequest),
+            success: function () {
+                alert("주문이 완료되었습니다.");
+                location.href = 'orders/history'
+            },
+            error: function (request) {
+                alert(request.responseText);
+            }
+        })
     }
 </script>
 </body>

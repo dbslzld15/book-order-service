@@ -3,7 +3,12 @@
 <html lang="en">
 <head th:replace="fragments/header :: header"></head>
 <body class="container-fluid">
-<h5><b>도서 목록</b></h5>
+<div>
+    <h5 style="text-align: left" th:align="left"><b>도서 목록</b></h5>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <a th:href="@{/books/new}" class="btn btn-primary" type="button">도서 생성</a>
+    </div>
+</div>
 <table class="table table-hover">
     <thead>
     <tr>
@@ -34,22 +39,26 @@
                class="btn btn-outline-primary" type="button">상세 정보</a>
         </td>
         <td>
-            <input th:value="삭제" onclick="deleteBook()" class="btn btn-outline-danger" type="button"/>
+            <a th:id="'delete_' + *{bookId}" onclick="deleteBook(this)" class="btn btn-outline-danger" type="button">삭제</a>
         </td>
     </tr>
     </tbody>
 </table>
-<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-    <a th:href="@{/books/new}" class="btn btn-primary" type="button">도서 생성</a>
+<div class="text-center mt-3">
+    <a onclick="history.back()" class="btn btn-outline-primary" type="button">이전 페이지 이동</a>
 </div>
 
 <script>
-    function deleteBook() {
-        var bookId = $('#books').find("td:eq(1)").text();
+    function deleteBook(obj) {
+        var bookId = obj.id.split('_')[1];
         console.log(bookId);
         $.ajax({
             type: "DELETE",
             url: "/books/" + bookId,
+            success: function () {
+                alert("도서 삭제가 완료되었습니다.");
+                location.href = 'books/admin'
+            },
             error: function (request) {
                 alert(request.responseText);
             }

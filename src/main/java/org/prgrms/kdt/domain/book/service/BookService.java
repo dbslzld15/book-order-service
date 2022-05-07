@@ -48,6 +48,11 @@ public class BookService {
                 .orElseThrow(() -> new BookException(BOOK_NOT_EXIST));
     }
 
+    public Book getByItemId(Long itemId) {
+        return bookRepository.findByItemId(itemId)
+                .orElseThrow(() -> new BookException(BOOK_NOT_EXIST));
+    }
+
     @Transactional
     public void update(long bookId, BookUpdateRequest updateRequest) {
         Book book = bookRepository.findById(bookId)

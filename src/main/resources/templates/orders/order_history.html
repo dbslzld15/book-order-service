@@ -12,7 +12,9 @@
         <th scope="col">저자</th>
         <th scope="col">주문 주소</th>
         <th scope="col">주문 상태</th>
-        <th scope="col">가격</th>
+        <th scope="col">도서 가격</th>
+        <th scope="col">주문 수량</th>
+        <th scope="col">총 주문 가격</th>
         <th scope="col">주문 날짜</th>
         <th scope="col"></th>
     </tr>
@@ -24,7 +26,9 @@
         <td th:text="*{orderItem.book.authorName.getName()}"></td>
         <td th:text="*{order.getAddress().address}"></td>
         <td th:text="*{order.orderStatus.getValue()}"></td>
-        <td th:text="*{orderItem.book.price.getPrice()}"></td>
+        <td th:text="*{orderItem.book.getPrice().getPrice()}"></td>
+        <td th:text="*{orderItem.orderQuantity}"></td>
+        <td th:text="*{orderItem.totalPrice.getPrice()}"></td>
         <td th:text="*{#temporals.format(order.getOrderDateTime(), 'yyyy-MM-dd HH:mm')}"></td>
         <td th:if="${orderItem == order.getOrderItems().get(order.getOrderItems().size()-1)} and *{order.orderStatus.getValue().equals('주문 접수')}">
             <button th:id="'cancel_' + *{order.orderId}" type="button" class="btn btn-outline-danger"

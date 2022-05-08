@@ -61,6 +61,7 @@ public class BookService {
 
         itemService.update(item.getItemId(), updateRequest.getPrice(), updateRequest.getStockQuantity());
         Book updateBook = Book.builder()
+                .bookId(bookId)
                 .title(new Title(updateRequest.getTitle()))
                 .authorName(new Name(updateRequest.getAuthorName()))
                 .itemId(item.getItemId())

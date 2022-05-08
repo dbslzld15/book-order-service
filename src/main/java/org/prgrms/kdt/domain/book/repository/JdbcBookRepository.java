@@ -65,11 +65,11 @@ public class JdbcBookRepository implements BookRepository{
     public Optional<Book> findByItemId(Long itemId) {
         try {
             Book book = jdbcTemplate.queryForObject("SELECT * FROM book b JOIN item i on b.item_id = i.item_id " +
-                            "WHERE b.item_id = :itemId AND b.is_deleted = 'N'",
+                            "WHERE b.item_id = :itemId",
                     Collections.singletonMap("itemId", itemId), bookRowMapper);
             return Optional.of(book);
         } catch (EmptyResultDataAccessException e) {
-            log.error("입력받은 아이디에 해당하는 도서 정보가 존재하지 않습니다", e);
+            log.error("입력받은 아이디에 해당하는 도서 정보가 존재하지 않습니다. {}", itemId);
             return Optional.empty();
         }
     }
@@ -77,7 +77,7 @@ public class JdbcBookRepository implements BookRepository{
     @Override
     public int update(Book book) {
         return jdbcTemplate.update("UPDATE book " +
-                "SET title = :title, author_name = :authorName, item_id = :itemId, created_at = :createdAt, modified_at = :modifiedAt " +
+                "SET title = :title, author_name = :authorName, item_id = :itemId, modified_at = :modifiedAt " +
                 "WHERE book_id = :bookId", toParamMap(book));
     }
 
